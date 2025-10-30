@@ -4,7 +4,7 @@ from display_user import user_display
 stop = False
 start = True
 
-while start:
+while start: # hiển thị chon
   choose_display = int(input('1. Manager \n2. User \nPleaser enter your choice(1/2): '))
   
   if choose_display == 1:
@@ -15,4 +15,3 @@ while start:
     continue_or_stop = input('\nWrong input\nIf you want to continue the program please enter "continue" to do\nIf not please enter "stop"\nYour choice: ')
     if continue_or_stop == 'stop':
       start = False
-#Thử commit bằng add file
