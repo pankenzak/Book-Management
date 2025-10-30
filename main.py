@@ -1,6 +1,6 @@
 #chỗ này để code tổng
-import display_manager.py
-import display_user.py
+from display_manager import manager_display
+from display_user import user_display
 
 stop = False
 start = True
