@@ -1,6 +1,4 @@
 #chỗ này để code tổng
-def manager_display():
-  pass
 
 def user_display():
   back = False
