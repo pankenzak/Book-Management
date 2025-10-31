@@ -1,10 +1,12 @@
 #Code giao diện user
-def show_menu():
-  print("User menu")
-  print('1. Search')
-  print("2. Term")
-  print('3. News')
-  print('4. Out')
+# def show_menu():
+#   print("User menu")
+#   print('1. Search')
+#   print("2. Term")
+#   print('3. News')
+#   print('4. Out')
+#Dai dong ghi lai thanh mot chuoi cho gon
+#Neu dung thi thieu dong input
   
 def user_display():
   back = False
