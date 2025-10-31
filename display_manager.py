@@ -1,4 +1,6 @@
 #code giao diện quản lý
+import pandas as pd #truc quan hoa du lieu
+from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
 def use_data_book():
@@ -6,13 +8,25 @@ def use_data_book():
         book_list = file_r.readlines()
         
         def print_all_book():
+            data_list = []
+            
             for i in book_list:
-                book_materies = i.split('; ') #lay tung quyen sach ra trong list
+                book_materies = [x.strip() for x in i.split(';')] #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
                 import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4])
-                print(f'\n{import_data.print_all_book()}') #Khai bao sach vao va in ra
+                data_list.append(import_data.__dict__)
+                #sau khi tao du lieu tu data se chuyen no thanh dang dict
+                df.index = range(1, len(df) + 1)
+                #sau do moi dict la mot value cua list
+            
+            df = pd.DataFrame(data_list) #pd.DataFrame() lenh dung de truc quan hoa du lieu. Su dung cac key la heading va value la noi dung
+            
+            #dung de cho index chay tu 1 (ban dau index chay tu 0 den gia tri cuoi) nhung line nay se tang them 1 cho index
+            
+            print(tabulate(df, headers='keys', tablefmt='grid', showindex=True, stralign='left'))
+            #in dang bang(noi dung bang, headers la heading va keys bang se hieu la lay df.columns cua dataframe, grid la hinh dang cua bang(dang ---), showindex de hien thi index cua dataframe, can le)
                 
         def add_book(name_book, author, category, producer, quantity):
-            with open('FileBook.txt', 'w') as file_w: #Mo lai file sach o che do ghi
+            with open('FileBook.txt', 'a') as file_w: #Mo lai file sach o che do ghi
                 file_w.writelines(f'{name_book}; {author}; {category}; {producer}; {quantity}')
             pass
         
