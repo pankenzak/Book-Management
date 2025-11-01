@@ -10,9 +10,13 @@
   
 def user_display():
   back = False
-  while back == False:  #while nay dung de back cua phan lua chon lam gi
-    to_do = int(input('\n1. Search\n2. Terms\n3. News\n4. Back\nPlease enter your choice(1/2): '))
-    
+  while back == False:
+    try:
+      to_do = int(input('\n1. Search\n2. Terms\n3. News\n4. Back\nPlease enter your choice(1/2): '))
+    except ValueError:
+      print("Lựa chọn không phù hợp vui lòng nhập lại 1/2/3/4")
+      continue
+
     if to_do == 1:
       print("FILTER")
       back_1 = False
