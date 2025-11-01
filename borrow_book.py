@@ -1,6 +1,6 @@
 #chỗ này để lưu data khách mượn sách và thông tin sách được mượn 
 
-def client_display():
+def borrow_display():
     name_user = input('\nEnter your name: ')
     student_id = input('Enter your student ID: ')
     id_book = input('Enter the ID of the book you want to borrow: ')
@@ -9,7 +9,7 @@ def client_display():
     found = False
     updated_list = []
     for line in book_list:
-        book_materies = [x.strip() for x i line.split('; ')]
+        book_materies = [x.strip() for x in line.split('; ')]
         if book_materies[0] == id_book:
             found = True
             quantity = int(book_materies[6])
@@ -22,12 +22,12 @@ def client_display():
                 print(f'\nSorry, {book_materies[1]} is not available now')
             updated_list.append('; '.join(book_materies))
         else:
-            update_list.append(line.strip())
+            updated_list.append(line.strip())
         if not found:
             print(f'\nBook with ID {id_book} not found')
         with open('FileBook.txt', 'w') as file_w:
-        for line in updated_list:
-            file_w.write(line.strip() + '\n')
+            for line in updated_list:
+                file_w.write(line.strip() + '\n')
 
     print("\nBook list has been updated successfully.")
     
