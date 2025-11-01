@@ -51,7 +51,6 @@ def use_data_book():
                                 back = True
                     
         def delete_book():
-            def delete_book():
             #doc du lieu tu file
             with open('FileBook.txt', 'r') as file_d:
                 book_list = file_d.readlines()
