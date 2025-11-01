@@ -24,6 +24,9 @@ def user_display():
         to_do_1 = int(input('\n1. All\n2. Author\n3. Category\n4. Back\nPlease enter your choice(1/2/3/4): ')) #Nhung input khac doi build data sau do lien ket
         if to_do_1 == 4:  #back ve chon lam gi
           back_1 = True
+        elif to_do_1 == 1:
+          with open("FileBook.txt", "r", encoding="utf-8") as f:
+            ALL_Book = f.read()
     elif to_do == 2:
       def hien_thi_dieu_khoan():
         print('LIBRARY TERMS')
