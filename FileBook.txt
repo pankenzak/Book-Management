@@ -8,14 +8,3 @@ B007; The Catcher in the Rye; J.D. Salinger; Classic; 1951; Little, Brown and Co
 B008; Moby-Dick; Herman Melville; Adventure; 1851; Harper & Brothers; 14; True
 B009; The Alchemist; Paulo Coelho; Philosophy; 1988; HarperCollins; 19; True
 B010; The Lord of the Rings; J.R.R. Tolkien; Fantasy; 1954; Allen & Unwin; 28; True
-B011; A Game of Thrones; George R.R. Martin; Fantasy; 1996; Bantam Spectra; 29; True
-B012; The Shining; Stephen King; Horror; 1977; Doubleday; 26; True
-B013; The Girl with the Dragon Tattoo; Stieg Larsson; Thriller; 2005; Norstedts Förlag; 24; True
-B014; The Fault in Our Stars; John Green; Romance; 2012; Dutton Books; 20; True
-B015; The Hunger Games; Suzanne Collins; Dystopian; 2008; Scholastic Press; 23; True
-B016; Gone Girl; Gillian Flynn; Thriller; 2012; Crown Publishing Group; 25; True
-B017; The Silent Patient; Alex Michaelides; Thriller; 2019; Celadon Books; 0; False
-B018; The Book Thief; Markus Zusak; Historical Fiction; 2005; Picador; 18; True
-B019; The Midnight Library; Matt Haig; Fantasy; 2020; Canongate Books; 10; True
-B020; The Road; Cormac McCarthy; Post-apocalyptic; 2006; Alfred A. Knopf; 5; True
-B021; Life of Pi; Yann Martel; Adventure; 2001; Knopf Canada; 0; False
