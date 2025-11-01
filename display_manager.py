@@ -14,7 +14,7 @@ def use_data_book():
                 for i in book_list:
                     #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
                     book_materies = [x.strip() for x in i.split('; ')]
-                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5])
+                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7])
                     data_list.append(import_data.__dict__)
                     
                 df = pd.DataFrame(data_list)
@@ -22,9 +22,12 @@ def use_data_book():
             
             print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
                 
-        def add_book(id_book, name_book, author, category, producer, quantity):
-            with open('FileBook.txt', 'a') as file_w: #Mo lai file sach o che do ghi
-                file_w.write(f'\n{id_book}; {name_book}; {author}; {category}; {producer}; {quantity}')
+        def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available):
+            with open('FileBook.txt', 'a') as file_w:
+                
+                file_w.write(f'{id_book}; {name_book}; {author}; {category}; {publication_year}; {producer}; {quantity}; {available}\n')
+            print_all_book()
+
             
         def update_book():
             with open('FileBook.txt', 'r') as file_u: #Doc file sach
@@ -36,7 +39,7 @@ def use_data_book():
                     back = False
                     while back == False:
                         if select_book == select_ID:
-                            what_change = int(input('\n1. Name book\n2. Author\n3. Category\n4. Producer\n5. Quantity\n6. Back\nEnter your choice(1/2/3/4/5/6): '))
+                            what_change = int(input('\n1. Name book\n2. Author\n3. Category\n4. Publication year\n5. Producer\n6. Quantity\n7. Back\nEnter your choice(1/2/3/4/5/6/7): '))
                             if what_change == 1:
                                 book_materies[1] = input('Enter book name: ')
                             elif what_change == 2:
@@ -44,10 +47,12 @@ def use_data_book():
                             elif what_change == 3:
                                 book_materies[3] = input('Enter category: ')
                             elif what_change == 4:
-                                book_materies[4] = input('Enter producer: ')
+                                book_materies[4] = input('Enter producer: ')    
                             elif what_change == 5:
-                                book_materies[5] = int(input('Enter quantity: '))
+                                book_materies[5] = input('Enter producer: ')
                             elif what_change == 6:
+                                book_materies[6] = int(input('Enter quantity: '))
+                            elif what_change == 7:
                                 back = True
                     
         def delete_book():
@@ -79,7 +84,7 @@ def use_data_book():
                 data_list = []
                 for i in new_list:
                     book_materies = [x.strip() for x in i.split('; ')]
-                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5])
+                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7])
                     data_list.append(import_data.__dict__)
                 df = pd.DataFrame(data_list)
                 df.index = range(1, len(df) + 1)
@@ -97,9 +102,11 @@ def use_data_book():
                 name_book = input('Enter book name: ')
                 author = input('Enter author name: ')
                 category = input('Enter category: ')
+                publication_year = input('Enter publication_year: ')
                 producer = input('Enter producer: ')
                 quantity = int(input('Enter quantity: '))
-                add_book(id_book, name_book, author, category, producer, quantity)
+                available = quantity > 0
+                add_book(id_book, name_book, author, category, publication_year, producer, quantity, available)
                 
             elif to_do_1 == 3:
                 update_book()
