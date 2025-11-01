@@ -2,7 +2,7 @@
 import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
-from File_Book import Search 
+from display_user import search 
 def print_all_book():
             with open('FileBook.txt', 'r') as file_r: #Doc file sach
                 book_list = file_r.readlines()
@@ -145,3 +145,5 @@ def manager_menu():
         use_data_book()
     if to_do == 4:
         back = True
+    if to_do == 2:
+        search()
