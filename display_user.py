@@ -7,91 +7,11 @@
 #   print('4. Out')
 #Dai dong ghi lai thanh mot chuoi cho gon
 #Neu dung thi thieu dong input
-  
-def user_display():
-  back = False
-  while back == False:
-    try:
-      to_do = int(input('\n1. Search\n2. Terms\n3. News\n4. Back\nPlease enter your choice(1/2): '))
-    except ValueError:
-      print("Lựa chọn không phù hợp vui lòng nhập lại 1/2/3/4")
-      continue
 
-    if to_do == 1:
-      print("FILTER")
-      back_1 = False
-      while back_1 == False:  #while nay dung de back cua phan Filter
-        to_do_1 = int(input('\n1. All\n2. Author\n3. Category\n4. Back\nPlease enter your choice(1/2/3/4): ')) #Nhung input khac doi build data sau do lien ket
-        if to_do_1 == 4:  #back ve chon lam gi
-          back_1 = True
-        elif to_do_1 == 1:
-          with open("FileBook.txt", "r", encoding="utf-8") as f:
-            ALL_Book = f.read()
+import pandas as pd
+from tabulate import tabulate
+from data_book import DataBook
 
-        elif to_do_1 == 2:
-            try:
-                with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    lines = f.readlines()
-            except :
-                print("Không tìm thấy file dữ liệu sách (FileBook.txt).")
-
-        # Bước 1: Tạo danh sách tác giả không trùng
-            authors = []
-            for line in lines:
-                data = [x.strip() for x in line.split(";")]
-                if len(data) >= 3:
-                    author = data[2]
-                    if author not in authors:
-                        authors.append(author)
-
-        # Bước 2: Hiển thị danh sách tác giả
-            print("\n=== DANH SÁCH TÁC GIẢ ===")
-            for i, author in enumerate(authors):
-                print(f"{i}. {author}")
-
-        # Bước 3: Người dùng chọn tác giả
-            while True:
-                try:
-                    chon = int(input("\nChọn số tương ứng với tác giả: "))
-                    if 0 <= chon <= len(authors):
-                        tac_gia_chon = authors[chon]
-                        break
-                    else:
-                        print("Số không hợp lệ, vui lòng nhập lại.")
-                except ValueError:
-                    print("Vui lòng nhập số hợp lệ.")
-
-        # Bước 4: Hiển thị các sách của tác giả đã chọn
-            print(f"\n=== CÁC SÁCH CỦA {tac_gia_chon.upper()} ===")
-            found = False
-            for line in lines:
-                data = [x.strip() for x in line.split(";")]
-                if len(data) >= 3 and data[2] == tac_gia_chon:
-                    print(f"- {data[1]} (Thể loại: {data[3]}, SL: {data[6]})")
-                    found = True
-                    
-            if not found:
-                print("Không tìm thấy sách nào của tác giả này.")
-                
-        
-
-
-    elif to_do == 2:
-      def hien_thi_dieu_khoan():
-        print('LIBRARY TERMS')
-        FILE_NAME = "dieukhoanthuvien.txt"
-      try:
-        with open ('dieukhoanthuvien.txt','r',encoding = 'utf-8') as f:
-          NOI_DUNG = f.read()
-          print('NOI_DUNG')
-      except ValueError:
-        print(f"ERROR: NOT TO FOUND THIS FILE '{FILE_NAME}'.")
-        print(' TRY ONE MORE AGAIN ') 
-      pass
-    elif to_do == 3: #chua co flowchart
-        import os
-
-# DICTIONARY DÙNG CHO HÀM 'user_display'
 LIST_OF_CATEGORY = {
     1: "Fiction",
     2: "Romance",
@@ -105,186 +25,136 @@ LIST_OF_CATEGORY = {
     10: "Memoir & Autobiography",
     11: "Self-Help",
     12: "Comic & Graphic Novel"
-    # (Bạn có thể thêm/sửa thể loại ở đây cho khớp file data của bạn)
 }
 
-# --- CODE GIAO DIỆN USER (ĐÃ SỬA) ---
+
+def display_books(data_list):
+    """Hiển thị danh sách sách theo dạng bảng."""
+    if not data_list:
+        print("\nNo books available.\n")
+        return
+
+    df = pd.DataFrame(data_list)
+    df.index = range(1, len(df) + 1)
+    print(tabulate(df, headers='keys', tablefmt='grid', showindex=True, stralign='left'))
+
+
 def user_display():
     back = False
-    while back == False:
+    while not back:
         try:
-            # Sửa prompt cho đầy đủ
-            to_do = int(input('\n1. Search\n2. Terms\n3. News\n4. Back\nPlease enter your choice(1/2/3/4): '))
+            print("\n====== USER MENU ======")
+            to_do = int(input("1. Search\n2. Terms\n3. News\n4. Back\nPlease enter your choice (1/2/3/4): "))
         except ValueError:
-            print("Lựa chọn không phù hợp vui lòng nhập lại 1/2/3/4")
+            print("Invalid input. Please enter 1, 2, 3, or 4.")
             continue
 
+        # ----- OPTION 1: SEARCH -----
         if to_do == 1:
-            print("FILTER")
-            
-            # --- TỐI ƯU HÓA: Đọc file MỘT LẦN ở đây ---
             try:
                 with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    lines = f.readlines() # lines là một list các dòng
+                    book_list = f.readlines()
             except FileNotFoundError:
-                print("LỖI: Không tìm thấy file dữ liệu sách (FileBook.txt).")
-                input("Nhấn Enter để quay lại...")
-                continue # Quay lại menu chính
+                print("ERROR: FileBook.txt not found.")
+                continue
 
-            # Bắt đầu vòng lặp menu con
-            back_1 = False
-            while back_1 == False:
-                try: # Thêm try...except cho menu con
-                    to_do_1 = int(input('\n1. All\n2. Author\n3. Category\n4. Back\nPlease enter your choice(1/2/3/4): '))
+            data_list = []
+            for line in book_list:
+                book_materies = [x.strip() for x in line.split('; ')]
+                if len(book_materies) == 8:
+                    import_data = DataBook(*book_materies)
+                    data_list.append(import_data.__dict__)
+
+            back_search = False
+            while not back_search:
+                try:
+                    print("\n------ SEARCH FILTER ------")
+                    choice = int(input("1. All Books\n2. By Author\n3. By Category\n4. Back\nEnter your choice (1/2/3/4): "))
                 except ValueError:
-                    print("Lỗi: Vui lòng nhập số 1/2/3/4")
+                    print("Invalid input. Please enter 1, 2, 3, or 4.")
                     continue
-                
-                if to_do_1 == 4:  # back ve chon lam gi
-                    back_1 = True
-                    
-                elif to_do_1 == 1:
-                    print("\n--- TẤT CẢ SÁCH ---")
-                    # Sửa: In từng dòng cho dễ đọc
-                    if not lines:
-                         print("File rỗng.")
-                    for line in lines:
-                        print(line.strip()) # strip() để xóa xuống dòng thừa
-                    print("--------------------")
-                    input("Nhấn Enter để tiếp tục...")
 
-                elif to_do_1 == 2:
-                    # Bước 1: Tạo danh sách tác giả (đã có 'lines' từ bên ngoài)
-                    authors = []
-                    for line in lines:
-                        # SỬA LỖI LỚN: Dùng split(";")
-                        data = [x.strip() for x in line.split(";")] 
-                        if len(data) >= 3:
-                            author = data[2]
-                            if author not in authors:
-                                authors.append(author)
+                # View all books
+                if choice == 1:
+                    display_books(data_list)
+                    input("\nPress Enter to continue...")
 
-                    # Bước 2: Hiển thị danh sách
-                    print("\n=== DANH SÁCH TÁC GIA ===")
-                    # SỬA LOGIC: Bắt đầu từ 1
-                    for i, author in enumerate(authors, 1): 
+                # Search by Author
+                elif choice == 2:
+                    authors = sorted(set(book["author"] for book in data_list))
+                    print("\n=== AUTHOR LIST ===")
+                    for i, author in enumerate(authors, 1):
                         print(f"{i}. {author}")
 
-                    # Bước 3: Người dùng chọn
-                    while True:
-                        try:
-                            chon = int(input("\nChọn số tương ứng với tác giả (Nhập 0 để quay lại): "))
-                            if chon == 0:
-                                break
-                            if 1 <= chon <= len(authors):
-                                # SỬA LOGIC: Lấy index [chon - 1]
-                                tac_gia_chon = authors[chon - 1] 
-                                break
-                            else:
-                                print("Số không hợp lệ, vui lòng nhập lại.")
-                        except ValueError:
-                            print("Vui lòng nhập số hợp lệ.")
-                    
-                    if chon == 0: # Nếu người dùng chọn 0, quay lại menu Filter
-                        continue 
+                    try:
+                        selected = int(input("\nSelect author number (0 to go back): "))
+                        if selected == 0:
+                            continue
+                        author_name = authors[selected - 1]
+                    except (ValueError, IndexError):
+                        print("Invalid selection.")
+                        continue
 
-                    # Bước 4: Hiển thị sách
-                    print(f"\n=== CÁC SÁCH CỦA {tac_gia_chon.upper()} ===")
-                    found = False
-                    for line in lines:
-                        # SỬA LỖI LỚN: Dùng split(";")
-                        data = [x.strip() for x in line.split(";")]
-                        
-                        # SỬA LỖI LỚN: Check len >= 6 và dùng data[5]
-                        if len(data) >= 6 and data[2] == tac_gia_chon:
-                            print(f"- {data[1]} (Thể loại: {data[3]}, SL/Giá: {data[5]})") 
-                            found = True
+                    filtered_books = [b for b in data_list if b["author"] == author_name]
+                    print(f"\n=== BOOKS BY {author_name.upper()} ===")
+                    display_books(filtered_books)
+                    input("\nPress Enter to continue...")
 
-                    if not found:
-                        print("Không tìm thấy sách nào của tác giả này.")
-                    input("\nNhấn Enter để tiếp tục...")
-                
-                # --- CODE TÍCH HỢP TÌM THEO CATEGORY ---
-                elif to_do_1 == 3:
-                    # Bước 1: Hiển thị menu thể loại
-                    print('\n--- Vui lòng chọn thể loại ---')
+                # Search by Category
+                elif choice == 3:
+                    print("\n=== CATEGORIES ===")
                     for number, name in LIST_OF_CATEGORY.items():
                         print(f"{number}. {name}")
-                    print("---------------------------------")
-                    
-                    # Bước 2: Người dùng chọn
+
                     try:
-                        chon_so = int(input('Nhập số thể loại bạn muốn tìm: '))
+                        selected = int(input("Enter category number: "))
+                        category_name = LIST_OF_CATEGORY.get(selected)
+                        if not category_name:
+                            print("Invalid category number.")
+                            continue
                     except ValueError:
-                        print("Lỗi: Vui lòng nhập một con số.")
-                        continue # Quay lại menu Filter
+                        print("Please enter a number.")
+                        continue
 
-                    # Bước 3: Lấy tên thể loại từ số
-                    the_loai_chon = LIST_OF_CATEGORY.get(chon_so)
-                    if not the_loai_chon:
-                        print(f"Lỗi: Số {chon_so} không có trong danh mục.")
-                        continue # Quay lại menu Filter
+                    filtered_books = [b for b in data_list if b["category"].lower() == category_name.lower()]
+                    print(f"\n=== BOOKS IN CATEGORY: {category_name.upper()} ===")
+                    display_books(filtered_books)
+                    input("\nPress Enter to continue...")
 
-                    # Bước 4: Tìm kiếm và hiển thị sách
-                    print(f"\n--- Đang tìm sách thuộc thể loại: '{the_loai_chon}' ---")
-                    da_tim_thay = False
-                    
-                    for line in lines: # Dùng biến 'lines' đã đọc sẵn
-                        data = [x.strip() for x in line.split(";")]
-                        
-                        # So sánh cột thể loại (data[3])
-                        if len(data) >= 4 and data[3].lower() == the_loai_chon.lower():
-                            print(f"- {data[1]} (Tác giả: {data[2]})")
-                            da_tim_thay = True
-                            
-                    if not da_tim_thay:
-                        print("Không tìm thấy cuốn sách nào thuộc thể loại này.")
-                    input("\nNhấn Enter để tiếp tục...")
+                elif choice == 4:
+                    back_search = True
+                else:
+                    print("Invalid choice. Please try again.")
 
-
+        # ----- OPTION 2: TERMS -----
         elif to_do == 2:
-            FILE_NAME = "dieukhoanthuvien.txt"
-            print('\n--- LIBRARY TERMS ---')
+            print("\n====== LIBRARY TERMS ======")
             try:
-                with open (FILE_NAME,'r',encoding = 'utf-8') as f:
-                    NOI_DUNG = f.read()
-                    # SỬA LOGIC: In biến
-                    print(NOI_DUNG)
+                with open("dieukhoanthuvien.txt", "r", encoding="utf-8") as f:
+                    content = f.read()
+                    print(content)
             except FileNotFoundError:
-                print(f"ERROR: NOT TO FOUND THIS FILE '{FILE_NAME}'.")
-                print(' TRY ONE MORE AGAIN ')
-            except Exception as e:
-                print(f"Lỗi không xác định: {e}")
-            
-            input("\nNhấn Enter để quay lại...")
-        
-       
-       
+                print("ERROR: Terms file not found.")
+            input("\nPress Enter to go back...")
 
-        elif to_do == 4: #Back ve chon man hinh
-          back = True
-    
- 
-#chỗ này để code tổng
-from display_user import user_display
-from display_manager import manager_menu
+        # ----- OPTION 3: NEWS -----
+        elif to_do == 3:
+            print("\n====== LIBRARY NEWS ======")
+            try:
+                with open("news.txt", "r", encoding="utf-8") as f:
+                    news = f.read()
+                    print(news)
+            except FileNotFoundError:
+                print("No news file found.")
+            input("\nPress Enter to go back...")
 
-stop = False
-start = True
+        # ----- OPTION 4: BACK -----
+        elif to_do == 4:
+            back = True
+        else:
+            print("Invalid choice. Please try again.")
 
-while start: # hiển thị chon
-  choose_display = int(input('1. Manager \n2. User \nPleaser enter your choice(1/2): '))
-  
-  if choose_display == 1:
-    manager_menu()
-    
-  elif choose_display == 2:
-    user_display()
-    
-  else:  #Output sai
-    continue_or_stop = input('\nWrong input\nIf you want to continue the program please enter "continue" to do\nIf not please enter "stop"\nYour choice: ')
-    if continue_or_stop == 'stop':
-      start = False
+
   
 
       
