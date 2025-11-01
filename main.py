@@ -17,6 +17,6 @@ while start: # hiển thị chon
      
     else:  #Output sai
         continue_or_stop = input('\nWrong input\nIf you want to continue the program please enter "continue" to do\nIf not please enter "stop"\nYour choice: ')
-    if continue_or_stop == 'stop':
-        start = False
+        if continue_or_stop == 'stop':
+            start = False
   
