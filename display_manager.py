@@ -2,7 +2,7 @@
 import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
-
+from File_Book import Search 
 def print_all_book():
             with open('FileBook.txt', 'r') as file_r: #Doc file sach
                 book_list = file_r.readlines()
