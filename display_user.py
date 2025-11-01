@@ -32,7 +32,7 @@ def user_display():
           try:
             with open("FileBook.txt", "r", encoding="utf-8") as f:
               lines = f.readlines()
-          except FileNotFoundError:
+          except :
             print("Không tìm thấy file dữ liệu sách (FileBook.txt).")
 
         # Bước 1: Tạo danh sách tác giả không trùng
