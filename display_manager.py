@@ -4,30 +4,27 @@ from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
 def use_data_book():
-    with open('FileBook.txt', 'r') as file_r: #Doc file sach
-        book_list = file_r.readlines()
+    
         
         def print_all_book():
-            data_list = []
+            with open('FileBook.txt', 'r') as file_r: #Doc file sach
+                book_list = file_r.readlines()
+                data_list = [] 
+                
+                for i in book_list:
+                    #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
+                    book_materies = [x.strip() for x in i.split('; ')]
+                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4])
+                    data_list.append(import_data.__dict__)
+                    
+                df = pd.DataFrame(data_list)
+                df.index = range(1, len(df)+1)
             
-            for i in book_list:
-                book_materies = [x.strip() for x in i.split(';')] #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
-                import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4])
-                data_list.append(import_data.__dict__)
-                #sau khi tao du lieu tu data se chuyen no thanh dang dict
-                df.index = range(1, len(df) + 1)
-                #sau do moi dict la mot value cua list
-            
-            df = pd.DataFrame(data_list) #pd.DataFrame() lenh dung de truc quan hoa du lieu. Su dung cac key la heading va value la noi dung
-            
-            #dung de cho index chay tu 1 (ban dau index chay tu 0 den gia tri cuoi) nhung line nay se tang them 1 cho index
-            
-            print(tabulate(df, headers='keys', tablefmt='grid', showindex=True, stralign='left'))
-            #in dang bang(noi dung bang, headers la heading va keys bang se hieu la lay df.columns cua dataframe, grid la hinh dang cua bang(dang ---), showindex de hien thi index cua dataframe, can le)
+            print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
                 
         def add_book(name_book, author, category, producer, quantity):
             with open('FileBook.txt', 'a') as file_w: #Mo lai file sach o che do ghi
-                file_w.writelines(f'{name_book}; {author}; {category}; {producer}; {quantity}')
+                file_w.write(f'\n{name_book}; {author}; {category}; {producer}; {quantity}')
             pass
         
         def update_book():
