@@ -32,6 +32,8 @@ def user_display():
           try:
             with open("FileBook.txt", "r", encoding="utf-8") as f:
               lines = f.readlines()
+          except FileNotFoundError:
+            print("Không tìm thấy file dữ liệu sách (FileBook.txt).")
 
         # Bước 1: Tạo danh sách tác giả không trùng
             authors = []
@@ -56,8 +58,8 @@ def user_display():
               break
             else:
               print("Số không hợp lệ, vui lòng nhập lại.")
-            except ValueError:
-                print("Vui lòng nhập số hợp lệ.")
+          except ValueError:
+            print("Vui lòng nhập số hợp lệ.")
 
         # Bước 4: Hiển thị các sách của tác giả đã chọn
         print(f"\n=== CÁC SÁCH CỦA {tac_gia_chon.upper()} ===")
@@ -70,8 +72,7 @@ def user_display():
 
         if not found:
           print("Không tìm thấy sách nào của tác giả này.")
-except FileNotFoundError:
-        print("Không tìm thấy file dữ liệu sách (FileBook.txt).")
+
 
     elif to_do == 2:
       def hien_thi_dieu_khoan():
