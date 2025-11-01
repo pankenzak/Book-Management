@@ -70,7 +70,7 @@ def user_display():
 
         if not found:
           print("Không tìm thấy sách nào của tác giả này.")
-except FileNotFoundError:
+          except FileNotFoundError:
         print("Không tìm thấy file dữ liệu sách (FileBook.txt).")
 
     elif to_do == 2:
