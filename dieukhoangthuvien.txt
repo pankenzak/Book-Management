@@ -1,0 +1,24 @@
+Điều khoảng mượn sách của thư viện 
+Chào mừng bạn đến với thư viện. Vui lòng đọc kỹ các điều khoản dưới đây trước khi mượn sách.
+
+1.  **Về thẻ thư viện:**
+    * Mỗi độc giả chỉ được cấp 01 thẻ thư viện.
+    * Không cho người khác mượn thẻ.
+    * Mất thẻ phải báo ngay cho thủ thư để làm lại.
+
+2.  **Quy định mượn sách:**
+    * Độc giả hạng A: Tối đa 05 cuốn trong 14 ngày.
+    * Độc giả hạng B: Tối đa 03 cuốn trong 07 ngày.
+    * Không được mượn sách giáo trình đặc biệt, sách hiếm.
+
+3.  **Quy định trả sách:**
+    * Phải trả sách đúng hạn.
+    * Quá hạn 03 ngày (kể từ ngày hết hạn) sẽ bị phạt 10.000 VNĐ/cuốn/ngày.
+    * Nếu làm hỏng hoặc mất sách, phải đền bù 200% giá trị bìa sách.
+
+4.  **Trách nhiệm của độc giả:**
+    * Giữ gìn sách cẩn thận, không viết, vẽ, hoặc làm rách sách.
+    * Kiểm tra tình trạng sách trước khi rời quầy.
+    * Giữ trật tự, vệ sinh chung tại thư viện.
+
+Cảm ơn bạn đã hợp tác!
