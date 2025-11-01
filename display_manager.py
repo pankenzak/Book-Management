@@ -27,9 +27,29 @@ def use_data_book():
                 file_w.write(f'\n{id_book}; {name_book}; {author}; {category}; {producer}; {quantity}')
             
         def update_book():
-            print('dang build update')
-            pass
-        
+            with open('FileBook.txt', 'r') as file_u: #Doc file sach
+                book_list = file_u.readlines()
+                select_book = input('\nEnter the ID book: ')
+                for i in book_list:
+                    book_materies = [x.strip() for x in i.split('; ')]    
+                    select_ID = book_materies[0]
+                    back = False
+                    while back == False:
+                        if select_book == select_ID:
+                            what_change = int(input('\n1. Name book\n2. Author\n3. Category\n4. Producer\n5. Quantity\n6. Back\nEnter your choice(1/2/3/4/5/6): '))
+                            if what_change == 1:
+                                book_materies[1] = input('Enter book name: ')
+                            elif what_change == 2:
+                                book_materies[2] = input('Enter author name: ')
+                            elif what_change == 3:
+                                book_materies[3] = input('Enter category: ')
+                            elif what_change == 4:
+                                book_materies[4] = input('Enter producer: ')
+                            elif what_change == 5:
+                                book_materies[5] = int(input('Enter quantity: '))
+                            elif what_change == 6:
+                                back = True
+                    
         def delete_book():
             print('dang build delete')
             pass
