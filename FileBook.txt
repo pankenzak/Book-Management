@@ -1,5 +1,6 @@
-Harry Potter and the Philosopher's Stone; J.K. Rowling; Fantasy; Bloomsbury; 25
-To Kill a Mockingbird; Harper Lee; Classic; J.B. Lippincott & Co.; 18
-1984; George Orwell; Dystopian; Secker & Warburg; 30
-The Great Gatsby; F. Scott Fitzgerald; Novel; Charles Scribner's Sons; 22
-Pride and Prejudice; Jane Austen; Romance; T. Egerton; 27
+B001; Harry Potter and the Philosopher's Stone; J.K. Rowling; Fantasy; Bloomsbury; 25
+B002; To Kill a Mockingbird; Harper Lee; Classic; J.B. Lippincott & Co.; 18
+B003; 1984; George Orwell; Dystopian; Secker & Warburg; 30
+B004; The Great Gatsby; F. Scott Fitzgerald; Novel; Charles Scribner's Sons; 22
+B005; Pride and Prejudice; Jane Austen; Romance; T. Egerton; 27
+B006; The Hobbit; J.R.R. Tolkien; Fantasy; George Allen & Unwin; 20
