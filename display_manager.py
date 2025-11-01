@@ -3,10 +3,7 @@ import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
-def use_data_book():
-    
-        
-        def print_all_book():
+def print_all_book():
             with open('FileBook.txt', 'r') as file_r: #Doc file sach
                 book_list = file_r.readlines()
                 data_list = [] 
@@ -21,8 +18,8 @@ def use_data_book():
                 df.index = range(1, len(df)+1)
             
             print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
-                
-        def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available):
+
+def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available):
             with open('FileBook.txt', 'a') as file_w:
                 with open('FileBook.txt', 'a+') as file_n:
                     file_n.seek(0, 2)
@@ -33,8 +30,7 @@ def use_data_book():
                 file_w.write(f'{id_book}; {name_book}; {author}; {category}; {publication_year}; {producer}; {quantity}; {available}\n')
             print_all_book()
 
-            
-        def update_book():
+def update_book():
             with open('FileBook.txt', 'r') as file_u: #Doc file sach
                 book_list = file_u.readlines()
                 select_book = input('\nEnter the ID book: ')
@@ -72,8 +68,8 @@ def use_data_book():
                             file_w.write(f'{book_materies[0]}; {book_materies[1]}; {book_materies[2]}; {book_materies[3]}; {book_materies[4]}; {book_materies[5]}; {book_materies[6]}; {book_materies[7]}\n')
                         elif select_book == select_ID:
                             file_w.write(f'{update_list[0]}; {update_list[1]}; {update_list[2]}; {update_list[3]}; {update_list[4]}; {update_list[5]}; {update_list[6]}; {update_list[7]}\n')
-                    
-        def delete_book():
+
+def delete_book():
             #doc du lieu tu file
             with open('FileBook.txt', 'r') as file_d:
                 book_list = file_d.readlines()
@@ -108,7 +104,9 @@ def use_data_book():
                 df.index = range(1, len(df) + 1)
                 print('\nUpdated book list after deletion:\n')
                 print(tabulate(df, headers='keys', tablefmt='grid', showindex=True, stralign='left'))
-        
+
+def use_data_book():
+            
         back = False
         while back == False:
             to_do_1 = int(input('\n1. View all book list \n2. Add book\n3. Update book\n4. Delete book\n5. Back\nPleaser enter your choice(1/2/3/4): '))
