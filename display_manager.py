@@ -24,7 +24,12 @@ def use_data_book():
                 
         def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available):
             with open('FileBook.txt', 'a') as file_w:
-                
+                with open('FileBook.txt', 'a+') as file_n:
+                    file_n.seek(0, 2)
+                    if file_n.tell() > 0:
+                        file_n.seek(file_w.tell() - 1)
+                        if file_n.read(1) != '\n':    # nếu cuối file chưa có newline thì chèn
+                            file_n.write('\n')
                 file_w.write(f'{id_book}; {name_book}; {author}; {category}; {publication_year}; {producer}; {quantity}; {available}\n')
             print_all_book()
 
