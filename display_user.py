@@ -24,10 +24,27 @@ def user_display():
         to_do_1 = int(input('\n1. All\n2. Author\n3. Category\n4. Back\nPlease enter your choice(1/2/3/4): ')) #Nhung input khac doi build data sau do lien ket
         if to_do_1 == 4:  #back ve chon lam gi
           back_1 = True
-    elif to_do == 2: #chua co flowchart
+    elif to_do == 2:
+      def hien_thi_dieu_khoan():
+        print('LIBRARY TERMS')
+        FILE_NAME = "dieukhoanthuvien.txt"
+      try:
+        with open ('dieukhoanthuvien.txt','r',encoding = 'utf-8') as f:
+          NOI_DUNG = f.read()
+          print('NOI_DUNG')
+      except FILE NOT FOUND:
+        print(f"ERROR: NOT TO FOUND THIS FILE '{FILE_NAME}'.")
+        print(' TRY ONE MORE AGAIN ')
+      except 
       pass
     elif to_do == 3: #chua co flowchart
         pass
     elif to_do == 4: #Back ve chon man hinh
       back = True
-  pass
+ 
+      
+        
+        
+      
+      
+  
