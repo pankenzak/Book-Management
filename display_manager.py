@@ -51,8 +51,41 @@ def use_data_book():
                                 back = True
                     
         def delete_book():
-            print('dang build delete')
-            pass
+            def delete_book():
+            #doc du lieu tu file
+            with open('FileBook.txt', 'r') as file_d:
+                book_list = file_d.readlines()
+            #nhan ID sach can xoa
+            delete_id = input('\nEnter the ID book you want to delete: ')
+            found = False
+            new_list = []
+            #tao danh sach moi, bo quyen sach bi xoa
+            for line in book_list:
+                book_materies = [x.strip() for x in line.split('; ')]
+                if book_materies[0] == delete_id:
+                    found = True
+                    print(f'Book with ID {delete_id} has been deleted')
+                    continue
+                new_list.append(line.strip())
+            #neu khong tim thay ID
+            if not found:
+                print(f'No book found with ID {delete_id}')
+            #ghi lai file sau khi bi xoa
+            else:
+                with open('FileBook.txt', 'w') as file_w:
+                    for line in new_list:
+                        file_w.write(line.strip() + '\n')
+                print('\n Updated book list after deletion:\n')
+                #hien thi lai danh sach sau khi xoa
+                data_list = []
+                for i in new_list:
+                    book_materies = [x.strip() for x in i.split('; ')]
+                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5])
+                    data_list.append(import_data.__dict__)
+                df = pd.DataFrame(data_list)
+                df.index = range(1, len(df) + 1)
+                print('\nUpdated book list after deletion:\n')
+                print(tabulate(df, headers='keys', tablefmt='grid', showindex=True, stralign='left'))
         
         back = False
         while back == False:
