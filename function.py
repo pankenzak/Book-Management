@@ -76,9 +76,9 @@ def search():
     while not back_search:
         try:
             print("\n------ SEARCH FILTER ------")
-            choice = int(input("1. All Books\n2. By Author\n3. By Category\n4. Back\nEnter your choice (1/2/3/4): "))
+            choice = int(input("1. All Books\n2. By Book's Name\n3. By Author\n4. By Category\n5. Back\nEnter your choice (1/2/3/4/5): "))
         except ValueError:
-            print("Invalid input. Please enter 1, 2, 3, or 4.")
+            print("Invalid input. Please enter 1, 2, 3, 4, or 5.")
             continue
 
         # View all books
@@ -86,8 +86,29 @@ def search():
             display_books(data_list)
             input("\nPress Enter to continue...")
 
-        # Search by Author
+        # Search by Book's Name
         elif choice == 2:
+            names = sorted(set(book["name_book"] for book in data_list))
+            print("\n=== NAME LIST ===")
+            for i, name in enumerate(names, 1):
+                print(f"{i}. {name}")
+
+            try:
+                selected = int(input("\nSelect author number (0 to go back): "))
+                if selected == 0:
+                    continue
+                name = names[selected - 1]
+            except (ValueError, IndexError):
+                print("Invalid selection.")
+                continue
+
+            filtered_books = [b for b in data_list if b["name_book"] == name]
+            print(f"\n=== BOOKS BY {name.upper()} ===")
+            display_books(filtered_books)
+            input("\nPress Enter to continue...")
+
+        # Search by Author
+        elif choice == 3:
             authors = sorted(set(book["author"] for book in data_list))
             print("\n=== AUTHOR LIST ===")
             for i, author in enumerate(authors, 1):
@@ -108,7 +129,7 @@ def search():
             input("\nPress Enter to continue...")
 
         # Search by Category
-        elif choice == 3:
+        elif choice == 4:
             print("\n=== CATEGORIES ===")
             for number, name in LIST_OF_CATEGORY.items():
                 print(f"{number}. {name}")
@@ -128,7 +149,7 @@ def search():
             display_books(filtered_books)
             input("\nPress Enter to continue...")
 
-        elif choice == 4:
+        elif choice == 5:
             back_search = True
         else:
             print("Invalid choice. Please try again.")
@@ -235,4 +256,5 @@ def delete_book():
                 print('\n Updated book list after deletion:\n')
                 #hien thi lai danh sach sau khi xoa
                 print_all_book()            
+
 
