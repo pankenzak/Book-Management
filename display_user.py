@@ -5,7 +5,7 @@ def user_display():
     while not back:
         try:
             print("\n====== USER MENU ======")
-            to_do = int(input("1. Search\n2. Terms\n3. Borrow book\n4. Top trending\n5. Back\nPlease enter your choice (1/2/3/4/5): "))
+            to_do = int(input("1. Search\n2. Terms\n3. Borrow book\n4. Top trending\n5. Client\n6. Back\nPlease enter your choice (1/2/3/4/5): "))
         except ValueError:
             print("Invalid input. Please enter 1, 2, 3, or 4.")
             continue
@@ -33,12 +33,16 @@ def user_display():
                 print('No news file found.')
             input("\nPress Enter to go back...")
             
-        # ----- OPTION 5: BACK -----
+        # ----- OPTION 4: TOP TRENDING -----
         elif to_do == 4:
             top_trending()
-
-        # ----- OPTION 5: BACK -----
+            
+        # ----- Option 5: FIND DATA CLIENT -----
         elif to_do == 5:
+            use_data_client()
+
+        # ----- OPTION 6: BACK -----
+        elif to_do == 6:
             back = True
         else:
             print("Invalid choice. Please try again.")
