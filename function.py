@@ -7,7 +7,7 @@ list_ID = []
 list_author = []
 data_list = []
 list_book = []
-with open('FileBook.txt', 'r', encoding='utf-8') as file_r:
+with open('FileBook.txt', 'r') as file_r:
     book_list = file_r.readlines()
 for i in book_list:
     #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
@@ -27,7 +27,7 @@ def borrow_display(id_book = None):
     if id_book == None:
         id_book = input('Enter the ID of the book you want to borrow: ')
 
-    with open('FileBook.txt', 'r', encoding='utf-8') as file_r:
+    with open('FileBook.txt', 'r') as file_r:
         book_list = file_r.readlines()
 
     found = False
@@ -43,7 +43,7 @@ def borrow_display(id_book = None):
             if quantity > 0:
                 book_materies[6] = str(quantity - 1)
                 print(f'\n {name_user} has successfully borrowed {book_materies[1]}')
-                with open('BorrowList.txt', 'a', encoding='utf-8') as borrow_file:
+                with open('BorrowList.txt', 'a') as borrow_file:
                     borrow_file.write(f'{name_user}; {student_id}; {book_materies[0]}; {book_materies[1]}\n')
                 trend = True
                 trend_id = book_materies[0]     
@@ -127,46 +127,50 @@ def search():
                     borrow_display(borrow_or_back)
 
         # Search by Book's Name
-        elif choice == 2:
+  #      elif choice == 2:
+            
+
+            
+
+        # Search by Author 
+        elif choice == 3:
             index = 1
             for author in unique_list_author:
-                print(f'\n{index}. {author}')
+                dic_author = {index: author}
+                for keys, values in dic_author.items():
+                    print(f'\n{keys}. {values}')
                 index += 1
-
+                
             try:
                 selected = int(input("\nSelect author number (0 to go back): "))
                 if selected == 0:
                     continue
-                name = names[selected - 1]
+                else:
+                    index = 1
+                    for author in unique_list_author:
+                        book_of_author = []
+                        dic_author = {index: author}
+                        for keys, values in dic_author.items():
+                            if selected == keys:
+                                with open('FileBook.txt', 'r') as file_r:
+                                    book_list = file_r.readlines()
+                                for i in book_list:
+                                    #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
+                                    book_materies = [x.strip() for x in i.split('; ')]
+                                    if book_materies[2] == values:
+                                        import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
+                                        book_of_author.append(import_data.__dict__)
+                                        index += 1
+                                        
+                            else:
+                                index += 1
+                        df = pd.DataFrame(book_of_author)
+                        df.index = range(1, len(df)+1)
+                        print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
+                                        
             except (ValueError, IndexError):
                 print("Invalid selection.")
                 continue
-
-            filtered_books = [b for b in data_list if b["name_book"] == name]
-            print(f"\n=== BOOKS BY {name.upper()} ===")
-            display_books(filtered_books)
-            input("\nPress Enter to continue...")
-
-        # Search by Author
-        elif choice == 3:
-            authors = sorted(set(book["author"] for book in data_list))
-            print("\n=== AUTHOR LIST ===")
-            for i, author in enumerate(authors, 1):
-                print(f"{i}. {author}")
-
-            try:
-                selected = int(input("\nSelect author number (0 to go back): "))
-                if selected == 0:
-                    continue
-                author_name = authors[selected - 1]
-            except (ValueError, IndexError):
-                print("Invalid selection.")
-                continue
-
-            filtered_books = [b for b in data_list if b["author"] == author_name]
-            print(f"\n=== BOOKS BY {author_name.upper()} ===")
-            display_books(filtered_books)
-            input("\nPress Enter to continue...")
 
         # Search by Category
         elif choice == 4:
@@ -329,43 +333,8 @@ def top_trending():
     print_all_book('top_trending.txt')       
             
                       
-
-#cai nay la use client
-def use_data_client():    # Nhập id để tìm text xem có của người đó chưa, chưa thì tạo mớimới
-    while True:
-        print("\n=== Client Data Menu ===")
-        MSSV = input('Nhập ID khách hàng: ').upper()
-        if MSSV == "":
-            print('Quay lai menu...')
-            break
-
-
-        ID = f"{MSSV}.txt"
-
-        try:
-                    # Mở file nếu tồn tại
-            with open(ID, 'r', encoding="utf-8") as f:
-                data = f.read()
-            print("\nThông tin khách hàng hiện tại:")
-            print(data)
-
-        except FileNotFoundError:
-            print(f"\nKhông tìm thấy file: {ID}")
-            client_name = input('Nhập tên người dùng mới: ').strip()
-            with open(ID, 'w', encoding="utf-8") as f:
-                f.write(f"ID: {MSSV}\n")
-                f.write(f"Tên: {client_name}\n")
-                f.write("Sách đã mượn: (chưa có)\n")
-                f.write("Số ngày còn lại để trả: 0\n")
-            print(f"\nĐã tạo hồ sơ mới cho khách hàng {client_name} (ID: {MSSV})")
-            print("Sách đã mượn: (chưa có)")
-            print("Số ngày còn lại để trả: 0")
-
-        input("\nNhấn Enter để quay lại menu người dùng...")
-        break
-
-
-
+            
+            
             
             
             
@@ -411,4 +380,3 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
                 
                 
                 
-
