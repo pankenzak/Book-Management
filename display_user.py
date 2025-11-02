@@ -1,11 +1,11 @@
-from function import borrow_display, search
+from function import borrow_display, search, top_trending
 
 def user_display():
     back = False
     while not back:
         try:
             print("\n====== USER MENU ======")
-            to_do = int(input("1. Search\n2. Terms\n3. Borrow book\n4. Back\nPlease enter your choice (1/2/3/4): "))
+            to_do = int(input("1. Search\n2. Terms\n3. Borrow book\n4. Top trending\n5. Back\nPlease enter your choice (1/2/3/4/5): "))
         except ValueError:
             print("Invalid input. Please enter 1, 2, 3, or 4.")
             continue
@@ -18,7 +18,7 @@ def user_display():
         elif to_do == 2:
             print("\n====== LIBRARY TERMS ======")
             try:
-                with open("dieukhoanthuvien.txt", "r", encoding="utf-8") as f:
+                with open("dieukhoanthuvien.txt", "r") as f:
                     content = f.read()
                     print(content)
             except FileNotFoundError:
@@ -32,9 +32,13 @@ def user_display():
             except FileNotFoundError:
                 print('No news file found.')
             input("\nPress Enter to go back...")
-
-        # ----- OPTION 4: BACK -----
+            
+        # ----- OPTION 5: BACK -----
         elif to_do == 4:
+            top_trending()
+
+        # ----- OPTION 5: BACK -----
+        elif to_do == 5:
             back = True
         else:
             print("Invalid choice. Please try again.")

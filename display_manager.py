@@ -1,5 +1,5 @@
 #code giao diện quản lý
-from function import print_all_book, add_book, update_book, delete_book, search
+from function import print_all_book, add_book, update_book, delete_book, search, top_trending
 
 def use_data_book():
             
@@ -37,10 +37,14 @@ def use_data_book():
 def manager_menu():
   back = False
   while back == False:  #while nay dung de back cua phan lua chon lam gi
-    to_do = int(input('\n1. Data books\n2. Search\n3. News\n4. Back \nPleaser enter your choice(1/2/3/4): '))
+    to_do = int(input('\n1. Data books\n2. Search\n3. Top trending\n4. Back \nPleaser enter your choice(1/2/3/4): '))
     if to_do == 1:
         use_data_book()
-    if to_do == 4:
-        back = True
-    if to_do == 2:
+    elif to_do == 2:
         search()
+    elif to_do == 3:
+        top_trending()
+    elif to_do == 4:
+        back = True
+    
+

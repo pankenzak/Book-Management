@@ -2,10 +2,27 @@ import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
-def borrow_display():
+
+list_ID = []
+list_author = []
+data_list = []
+list_book = []
+with open('FileBook.txt', 'r', encoding='utf-8') as file_r:
+    book_list = file_r.readlines()
+for i in book_list:
+    #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
+    book_materies = [x.strip() for x in i.split('; ')]
+    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
+    list_ID.append(import_data.det_ID())
+    list_author.append(import_data.author_name())
+    data_list.append(import_data.__dict__)
+    list_book.append(import_data.book_name())
+
+def borrow_display(id_book = None):
     name_user = input('\nEnter your name: ')
     student_id = input('Enter your student ID: ')
-    id_book = input('Enter the ID of the book you want to borrow: ')
+    if id_book == None:
+        id_book = input('Enter the ID of the book you want to borrow: ')
 
     with open('FileBook.txt', 'r', encoding='utf-8') as file_r:
         book_list = file_r.readlines()
@@ -58,6 +75,9 @@ def display_books(data_list):
 
 
 def search():
+    
+    global list_ID, list_book, list_author
+    
     LIST_OF_CATEGORY = {
     1: "Fiction",
     2: "Romance",
@@ -72,8 +92,8 @@ def search():
     11: "Self-Help",
     12: "Comic & Graphic Novel"}
     try:
-            with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    book_list = f.readlines()
+        with open("FileBook.txt", "r") as f:
+            book_list = f.readlines()
     except FileNotFoundError:
         print("ERROR: FileBook.txt not found.")
 
@@ -95,8 +115,13 @@ def search():
 
         # View all books
         if choice == 1:
-            display_books(data_list)
-            input("\nPress Enter to continue...")
+            print_all_book()
+            borrow_or_back = input("\nEnter ID book to borrow a book or Enter 'R' to comeback: ")
+            if borrow_or_back == 'R':
+                continue
+            for ID in list_ID:
+                if borrow_or_back == ID:
+                    borrow_display(borrow_or_back)
 
         # Search by Book's Name
         elif choice == 2:
@@ -167,20 +192,21 @@ def search():
             print("Invalid choice. Please try again.")
             
 def print_all_book(what_file = 'FileBook.txt'):
-            with open(what_file, 'r') as file_r: #Doc file sach
-                book_list = file_r.readlines()
-                data_list = [] 
-                
-                for i in book_list:
-                    #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
-                    book_materies = [x.strip() for x in i.split('; ')]
-                    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
-                    data_list.append(import_data.__dict__)
-                    
-                df = pd.DataFrame(data_list)
-                df.index = range(1, len(df)+1)
-            
-            print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
+    global data_list
+    if what_file != 'FileBook.txt':
+        with open(what_file, 'r') as file_r: #Doc file sach
+            book_list = file_r.readlines()
+        data_list = [] 
+        
+        for i in book_list:
+            #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
+            book_materies = [x.strip() for x in i.split('; ')]
+            import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
+            data_list.append(import_data.__dict__)
+    df = pd.DataFrame(data_list)
+    df.index = range(1, len(df)+1)
+        
+    print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
 
 def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available, trends = 0):
             with open('FileBook.txt', 'a') as file_w:
@@ -299,8 +325,7 @@ def top_trending():
             file_t.write(f'{i[0]}; {i[1]}; {i[2]}; {i[3]}; {i[4]}; {i[5]}; {i[6]}; {i[7]}; {i[8]}\n')
     print_all_book('top_trending.txt')       
             
-            
-top_trending()            
+                      
             
             
             

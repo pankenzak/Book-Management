@@ -11,5 +11,12 @@ class DataBook:
         self.available = available
         self.trends = trends
         
+    def det_ID(self):
+        return self.id_book
 
+    def author_name(self):
+        return self.author
+    
+    def book_name(self):
+        return self.name_book
     
