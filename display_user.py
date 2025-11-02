@@ -1,24 +1,5 @@
 from function import borrow_display, search
 
-
-LIST_OF_CATEGORY = {
-    1: "Fiction",
-    2: "Romance",
-    3: "Non-Fiction",
-    4: "Science Fiction",
-    5: "Fantasy",
-    6: "Mystery",
-    7: "Action & Adventure",
-    8: "Horror",
-    9: "Historical Fiction",
-    10: "Memoir & Autobiography",
-    11: "Self-Help",
-    12: "Comic & Graphic Novel"
-}
-
-
-
-
 def user_display():
     back = False
     while not back:

@@ -2,7 +2,6 @@ import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
-
 def borrow_display():
     name_user = input('\nEnter your name: ')
     student_id = input('Enter your student ID: ')
@@ -59,6 +58,19 @@ def display_books(data_list):
 
 
 def search():
+    LIST_OF_CATEGORY = {
+    1: "Fiction",
+    2: "Romance",
+    3: "Non-Fiction",
+    4: "Science Fiction",
+    5: "Fantasy",
+    6: "Mystery",
+    7: "Action & Adventure",
+    8: "Horror",
+    9: "Historical Fiction",
+    10: "Memoir & Autobiography",
+    11: "Self-Help",
+    12: "Comic & Graphic Novel"}
     try:
             with open("FileBook.txt", "r", encoding="utf-8") as f:
                     book_list = f.readlines()
