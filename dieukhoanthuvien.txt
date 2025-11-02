@@ -1,4 +1,4 @@
-Điều khoảng mượn sách của thư viện 
+Điều khoản mượn sách của thư viện 
 Chào mừng bạn đến với thư viện. Vui lòng đọc kỹ các điều khoản dưới đây trước khi mượn sách.
 
 1.  **Về thẻ thư viện:**
@@ -22,3 +22,4 @@ Chào mừng bạn đến với thư viện. Vui lòng đọc kỹ các điều 
     * Giữ trật tự, vệ sinh chung tại thư viện.
 
 Cảm ơn bạn đã hợp tác!
+
