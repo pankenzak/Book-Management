@@ -1,7 +1,6 @@
 #chỗ này để code tổng
 from display_user import user_display
 from display_manager import manager_menu
-from borrow_book import borrow_display
 
 stop = False
 start = True

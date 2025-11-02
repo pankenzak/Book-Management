@@ -1,6 +1,6 @@
 #Chỗ này để code data của sách
 class DataBook:
-    def __init__(self, id_book:str, name_book:str, author:str, category:str, publication_year:int, producer: str, quantity:int, available:bool):
+    def __init__(self, id_book:str, name_book:str, author:str, category:str, publication_year:int, producer:str, quantity:int, available:bool, trends:int = 0):
         self.id_book = id_book
         self.name_book = name_book
         self.author = author
@@ -9,6 +9,7 @@ class DataBook:
         self.producer = producer
         self.quantity = quantity
         self.available = available
+        self.trends = trends
         
 
     
