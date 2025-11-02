@@ -166,8 +166,8 @@ def search():
         else:
             print("Invalid choice. Please try again.")
             
-def print_all_book():
-            with open('FileBook.txt', 'r') as file_r: #Doc file sach
+def print_all_book(what_file = 'FileBook.txt'):
+            with open(what_file, 'r') as file_r: #Doc file sach
                 book_list = file_r.readlines()
                 data_list = [] 
                 
@@ -270,3 +270,81 @@ def delete_book():
                 print_all_book()            
 
 
+def top_trending():
+    with open('FileBook.txt', 'r') as file_t:
+        book_list = file_t.readlines()
+    
+    compare_list = []
+    for line in book_list:
+        book_materies = [x.strip() for x in line.split('; ')]
+        if len(book_materies) < 9:
+            continue
+        if not compare_list:
+            compare_list.append(book_materies)
+            continue
+        
+        run = True
+        for i in compare_list:
+            if int(book_materies[8]) >= int(i[8]):
+                compare_list.insert(compare_list.index(i), book_materies)
+                run = False
+                break
+        if run:
+            compare_list.append(book_materies)
+
+    with open('top_trending.txt', 'w') as file_r:
+        file_r.write('')
+    with open('top_trending.txt', 'a') as file_t:
+        for i in compare_list:
+            file_t.write(f'{i[0]}; {i[1]}; {i[2]}; {i[3]}; {i[4]}; {i[5]}; {i[6]}; {i[7]}; {i[8]}\n')
+    print_all_book('top_trending.txt')       
+            
+            
+top_trending()            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+         
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
+                
