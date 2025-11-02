@@ -27,19 +27,17 @@ def borrow_display():
                 with open('BorrowList.txt', 'a', encoding='utf-8') as borrow_file:
                     borrow_file.write(f'{name_user}; {student_id}; {book_materies[0]}; {book_materies[1]}\n')
                 trend = True
-                trend_id = book_materies[0]     # ✅ lưu lại để tăng trends sau khi ghi file
+                trend_id = book_materies[0]     
             else:
                 print(f'\nSorry, {book_materies[1]} is not available now')
             updated_list.append('; '.join(book_materies))
         else:
             updated_list.append(line.strip())
 
-    # ✅ GHI FILE SAU KHI HOÀN THÀNH VÒNG LẶP
     with open('FileBook.txt', 'w', encoding='utf-8') as file_w:
         if updated_list:
             file_w.write('\n'.join(updated_list) + '\n')
 
-    # ✅ BÂY GIỜ MỚI TĂNG TRENDS (file đã đầy đủ tới B005)
     if trend and trend_id:
         update_book(True, trend_id)
 
@@ -209,7 +207,6 @@ def update_book(trend = False, select_book = None):
                             file_w.write(f'{book_materies[0]}; {book_materies[1]}; {book_materies[2]}; {book_materies[3]}; {book_materies[4]}; {book_materies[5]}; {book_materies[6]}; {book_materies[7]}; {book_materies[8]}\n')
                         elif select_book == select_ID:
                             file_w.write(f'{update_list[0]}; {update_list[1]}; {update_list[2]}; {update_list[3]}; {update_list[4]}; {update_list[5]}; {update_list[6]}; {update_list[7]}; {update_list[8]}\n')
-            print_all_book()
 
 def delete_book():
             #doc du lieu tu file
@@ -238,3 +235,4 @@ def delete_book():
                 print('\n Updated book list after deletion:\n')
                 #hien thi lai danh sach sau khi xoa
                 print_all_book()            
+
