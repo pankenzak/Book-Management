@@ -1,4 +1,4 @@
-from function import borrow_display, search, top_trending
+from function import borrow_display, search, top_trending, use_data_client
 
 def user_display():
     back = False
