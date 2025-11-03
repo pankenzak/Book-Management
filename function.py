@@ -2,6 +2,20 @@ import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
+LIST_OF_CATEGORY = {
+    1: "Fiction",
+    2: "Romance",
+    3: "Non-Fiction",
+    4: "Science Fiction",
+    5: "Fantasy",
+    6: "Mystery",
+    7: "Action & Adventure",
+    8: "Horror",
+    9: "Historical Fiction",
+    10: "Memoir & Autobiography",
+    11: "Self-Help",
+    12: "Comic & Graphic Novel"
+}
 
 def unique_data(ID = False, name = False, author = False, category = False, year = False, producer = False, quantity = False, available = False, trends = False):
     list_ID = []
@@ -25,7 +39,6 @@ def unique_data(ID = False, name = False, author = False, category = False, year
         return unique_list_book
     elif author:
         return unique_list_author
-
 
 def borrow_display(id_book = None):
     name_user = input('\nEnter your name: ')
@@ -85,26 +98,12 @@ def display_books(data_list):
 
 def search():
     
-    global unique_list_ID, unique_list_book, unique_list_author
-    
-    LIST_OF_CATEGORY = {
-    1: "Fiction",
-    2: "Romance",
-    3: "Non-Fiction",
-    4: "Science Fiction",
-    5: "Fantasy",
-    6: "Mystery",
-    7: "Action & Adventure",
-    8: "Horror",
-    9: "Historical Fiction",
-    10: "Memoir & Autobiography",
-    11: "Self-Help",
-    12: "Comic & Graphic Novel"}
     try:
-        with open("FileBook.txt", "r") as f:
+        with open("FileBook.txt", "r", encoding="utf-8") as f:
             book_list = f.readlines()
     except FileNotFoundError:
         print("ERROR: FileBook.txt not found.")
+        
 
     data_list = []
     for line in book_list:
@@ -119,18 +118,13 @@ def search():
             print("\n------ SEARCH FILTER ------")
             choice = int(input("1. All Books\n2. By Book's Name\n3. By Author\n4. By Category\n5. Back\nEnter your choice (1/2/3/4/5): "))
         except ValueError:
-            print("Invalid input. Please enter 1, 2, 3, 4, or 5.")
+            print("Invalid input. Please enter 1, 2, 3, or 4.")
             continue
 
         # View all books
         if choice == 1:
-            print_all_book()
-            borrow_or_back = input("\nEnter ID book to borrow a book or Enter 'R' to comeback: ")
-            if borrow_or_back == 'R':
-                continue
-            for ID in unique_list_ID:
-                if borrow_or_back == ID:
-                    borrow_display(borrow_or_back)
+            display_books(data_list)
+            input("\nPress Enter to continue...")
 
         # Search by Book's Name
         elif choice == 2:
@@ -153,48 +147,26 @@ def search():
             display_books(filtered_books)
             input("\nPress Enter to continue...")
             
-
-            
-
-        # Search by Author 
+        # Search by Author
         elif choice == 3:
-            index = 1
-            for author in unique_list_author:
-                dic_author = {index: author}
-                for keys, values in dic_author.items():
-                    print(f'\n{keys}. {values}')
-                index += 1
-                
+            authors = sorted(set(book["author"] for book in data_list))
+            print("\n=== AUTHOR LIST ===")
+            for i, author in enumerate(authors, 1):
+                print(f"{i}. {author}")
+
             try:
                 selected = int(input("\nSelect author number (0 to go back): "))
                 if selected == 0:
                     continue
-                else:
-                    index = 1
-                    for author in unique_list_author:
-                        book_of_author = []
-                        dic_author = {index: author}
-                        for keys, values in dic_author.items():
-                            if selected == keys:
-                                with open('FileBook.txt', 'r') as file_r:
-                                    book_list = file_r.readlines()
-                                for i in book_list:
-                                    #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
-                                    book_materies = [x.strip() for x in i.split('; ')]
-                                    if book_materies[2] == values:
-                                        import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
-                                        book_of_author.append(import_data.__dict__)
-                                        index += 1
-                                        
-                            else:
-                                index += 1
-                        df = pd.DataFrame(book_of_author)
-                        df.index = range(1, len(df)+1)
-                        print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
-                                        
+                author_name = authors[selected - 1]
             except (ValueError, IndexError):
                 print("Invalid selection.")
                 continue
+
+            filtered_books = [b for b in data_list if b["author"] == author_name]
+            print(f"\n=== BOOKS BY {author_name.upper()} ===")
+            display_books(filtered_books)
+            input("\nPress Enter to continue...")    
 
         # Search by Category
         elif choice == 4:
@@ -221,7 +193,6 @@ def search():
             back_search = True
         else:
             print("Invalid choice. Please try again.")
-            
 def print_all_book(what_file = 'FileBook.txt'):
     global data_list
     if what_file != 'FileBook.txt':
@@ -242,13 +213,12 @@ def print_all_book(what_file = 'FileBook.txt'):
             #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
             book_materies = [x.strip() for x in i.split('; ')]
             import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
-            list_ID.append(import_data.det_ID())
-            list_author.append(import_data.author_name())
             data_list.append(import_data.__dict__)
     df = pd.DataFrame(data_list)
     df.index = range(1, len(df)+1)
         
     print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
+
 def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available, trends = 0):
             with open('FileBook.txt', 'a') as file_w:
                 with open('FileBook.txt', 'a+') as file_n:
@@ -365,7 +335,8 @@ def top_trending():
         for i in compare_list:
             file_t.write(f'{i[0]}; {i[1]}; {i[2]}; {i[3]}; {i[4]}; {i[5]}; {i[6]}; {i[7]}; {i[8]}\n')
     print_all_book('top_trending.txt')       
-
+            
+                      
 def use_data_client():    # Nhập id để tìm text xem có của người đó chưa, chưa thì tạo mớimới
     while True:
         print("\n=== Client Data Menu ===")
@@ -385,7 +356,7 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
             print(data)
 
         except FileNotFoundError:
-            print(f"\nKhông tìm thấy file: {ID}")
+            print(f"\nKhông tìm thấy file: {MSSV}")
             client_name = input('Nhập tên người dùng mới: ').strip()
             with open(ID, 'w', encoding="utf-8") as f:
                 f.write(f"ID: {MSSV}\n")
@@ -397,7 +368,7 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
             print("Số ngày còn lại để trả: 0")
 
         input("\nNhấn Enter để quay lại menu người dùng...")
-        break
+        break            
             
             
             
@@ -444,6 +415,4 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
                 
                 
                 
-
-
 

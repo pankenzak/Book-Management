@@ -18,7 +18,7 @@ def user_display():
         elif to_do == 2:
             print("\n====== LIBRARY TERMS ======")
             try:
-                with open("dieukhoanthuvien.txt", "r") as f:
+                with open("dieukhoanthuvien.txt", "r", encoding="utf-8") as f:
                     content = f.read()
                     print(content)
             except FileNotFoundError:
