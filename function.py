@@ -132,7 +132,7 @@ def search():
     data_list = []
     for line in book_list:
         book_materies = [x.strip() for x in line.split('; ')]
-        if len(book_materies) == 8:
+        if len(book_materies) == 9:
             import_data = DataBook(*book_materies)
             data_list.append(import_data.__dict__)
 

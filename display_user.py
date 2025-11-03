@@ -4,7 +4,6 @@ def user_display():
     
     MSSV = login_user()
 
-    
     back = False
     while not back:
         try:
@@ -32,7 +31,7 @@ def user_display():
         # ----- OPTION 3: BORROW -----
         elif to_do == 3:
             try:
-                borrow_display()
+                borrow_display(MSSV)
             except FileNotFoundError:
                 print('No news file found.')
             input("\nPress Enter to go back...")
