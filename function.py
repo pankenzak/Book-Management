@@ -40,11 +40,9 @@ def unique_data(ID = False, name = False, author = False, category = False, year
     elif author:
         return unique_list_author
 
-def borrow_display(id_book = None):
-    name_user = input('\nEnter your name: ')
-    student_id = input('Enter your student ID: ')
-    if id_book == None:
-        id_book = input('Enter the ID of the book you want to borrow: ')
+def borrow_display(MSSV):
+    
+    id_book = input('Enter the ID of the book you want to borrow: ')
 
     with open('FileBook.txt', 'r') as file_r:
         book_list = file_r.readlines()
@@ -61,9 +59,8 @@ def borrow_display(id_book = None):
             quantity = int(book_materies[6])
             if quantity > 0:
                 book_materies[6] = str(quantity - 1)
-                print(f'\n {name_user} has successfully borrowed {book_materies[1]}')
-                with open('BorrowList.txt', 'a') as borrow_file:
-                    borrow_file.write(f'{name_user}; {student_id}; {book_materies[0]}; {book_materies[1]}\n')
+                borrowed_book_name = book_materies[1]
+                print(f"\nBạn đã mượn thành công: {borrowed_book_name}")
                 trend = True
                 trend_id = book_materies[0]     
             else:
@@ -75,6 +72,33 @@ def borrow_display(id_book = None):
     with open('FileBook.txt', 'w', encoding='utf-8') as file_w:
         if updated_list:
             file_w.write('\n'.join(updated_list) + '\n')
+            
+    if found and quantity > 0:
+        # Cập nhật file người dùng
+        user_file = f"{MSSV}.txt"
+        try:
+            # Đọc nội dung hiện tại
+            with open(user_file, 'r', encoding='utf-8') as f:
+                lines = f.readlines()
+
+            # Cập nhật dòng "Sách đã mượn:"
+            for i in range(len(lines)):
+                if lines[i].startswith("Sách đã mượn:"):
+                    current_books = lines[i].replace("Sách đã mượn:", "").strip()
+                    if current_books == "(chưa có)" or current_books == "":
+                        lines[i] = f"Sách đã mượn: {borrowed_book_name}\n"
+                    else:
+                        lines[i] = f"Sách đã mượn: {current_books}, {borrowed_book_name}\n"
+                    break
+
+            # Ghi lại file người dùng
+            with open(user_file, 'w', encoding='utf-8') as f:
+                f.writelines(lines)
+
+            print(f"Đã lưu thông tin mượn vào hồ sơ {user_file}")
+
+        except Exception as e:
+            print("Lỗi khi ghi file người dùng:", e)
 
     if trend and trend_id:
         update_book(True, trend_id)
@@ -372,7 +396,30 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
 
             
             
-            
+def login_user():
+    print("\n=== USER LOGIN ===")
+    MSSV = input("Nhập ID khách hàng (vd: SE203900): ").upper()
+    file_name = f"{MSSV}.txt"
+
+    try:
+        # Nếu có file → đọc thông tin
+        with open(file_name, 'r', encoding='utf-8') as f:
+            data = f.read()
+        print("\nThông tin khách hàng hiện tại:")
+        print(data)
+        print("\nĐăng nhập thành công!")
+        return MSSV  # trả về ID để dùng cho các thao tác sau
+    except FileNotFoundError:
+        # Nếu chưa có file → tạo mới
+        print("\nChưa có thông tin khách hàng. Tạo hồ sơ mới.")
+        name = input("Nhập tên khách hàng: ").strip()
+        with open(file_name, 'w', encoding='utf-8') as f:
+            f.write(f"ID: {MSSV}\n")
+            f.write(f"Tên: {name}\n")
+            f.write("Sách đã mượn: (chưa có)\n")
+            f.write("Số ngày còn lại để trả: 0\n")
+        print(f"\nHồ sơ mới đã được tạo cho khách hàng {name} (ID: {MSSV})")
+        return MSSV            
             
             
             
@@ -416,5 +463,6 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
                 
                 
                 
+
 
 
