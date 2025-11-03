@@ -1,6 +1,10 @@
-from function import borrow_display, search, top_trending, use_data_client
+from function import borrow_display, search, top_trending, use_data_client, login_user
 
 def user_display():
+    
+    MSSV = login_user()
+
+    
     back = False
     while not back:
         try:
