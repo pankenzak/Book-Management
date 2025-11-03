@@ -127,7 +127,25 @@ def search():
                     borrow_display(borrow_or_back)
 
         # Search by Book's Name
-  #      elif choice == 2:
+        elif choice == 2:
+            names = sorted(set(book["name_book"] for book in data_list))
+            print("\n=== BOOK'S NAME LIST ===")
+            for i, name in enumerate(names, 1):
+                print(f"{i}. {name}")
+
+            try:
+                selected = int(input("\nSelect book number (0 to go back): "))
+                if selected == 0:
+                    continue
+                name = names[selected - 1]
+            except (ValueError, IndexError):
+                print("Invalid selection.")
+                continue
+
+            filtered_books = [b for b in data_list if b["name_book"] == name]
+            print(f"\n=== BOOKS BY {name.upper()} ===")
+            display_books(filtered_books)
+            input("\nPress Enter to continue...")
             
 
             
@@ -380,3 +398,4 @@ def top_trending():
                 
                 
                 
+
