@@ -349,9 +349,39 @@ def top_trending():
         for i in compare_list:
             file_t.write(f'{i[0]}; {i[1]}; {i[2]}; {i[3]}; {i[4]}; {i[5]}; {i[6]}; {i[7]}; {i[8]}\n')
     print_all_book('top_trending.txt')       
-            
-                      
-            
+
+def use_data_client():    # Nhập id để tìm text xem có của người đó chưa, chưa thì tạo mớimới
+    while True:
+        print("\n=== Client Data Menu ===")
+        MSSV = input('Nhập ID khách hàng: ').upper()
+        if MSSV == "":
+            print('Quay lai menu...')
+            break
+
+
+        ID = f"{MSSV}.txt"
+
+        try:
+                    # Mở file nếu tồn tại
+            with open(ID, 'r', encoding="utf-8") as f:
+                data = f.read()
+            print("\nThông tin khách hàng hiện tại:")
+            print(data)
+
+        except FileNotFoundError:
+            print(f"\nKhông tìm thấy file: {ID}")
+            client_name = input('Nhập tên người dùng mới: ').strip()
+            with open(ID, 'w', encoding="utf-8") as f:
+                f.write(f"ID: {MSSV}\n")
+                f.write(f"Tên: {client_name}\n")
+                f.write("Sách đã mượn: (chưa có)\n")
+                f.write("Số ngày còn lại để trả: 0\n")
+            print(f"\nĐã tạo hồ sơ mới cho khách hàng {client_name} (ID: {MSSV})")
+            print("Sách đã mượn: (chưa có)")
+            print("Số ngày còn lại để trả: 0")
+
+        input("\nNhấn Enter để quay lại menu người dùng...")
+        break
             
             
             
@@ -398,4 +428,5 @@ def top_trending():
                 
                 
                 
+
 
