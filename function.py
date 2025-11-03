@@ -3,23 +3,29 @@ from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
 
-list_ID = []
-list_author = []
-data_list = []
-list_book = []
-with open('FileBook.txt', 'r') as file_r:
-    book_list = file_r.readlines()
-for i in book_list:
-    #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
-    book_materies = [x.strip() for x in i.split('; ')]
-    import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
-    list_ID.append(import_data.det_ID())
-    list_author.append(import_data.author_name())
-    data_list.append(import_data.__dict__)
-    list_book.append(import_data.book_name())
-unique_list_ID = list(set(list_ID))
-unique_list_author = list(set(list_author))
-unique_list_book = list(set(list_book))
+def unique_data(ID = False, name = False, author = False, category = False, year = False, producer = False, quantity = False, available = False, trends = False):
+    list_ID = []
+    list_author = []
+    list_book = []
+    with open('FileBook.txt', 'r') as file_r:
+        book_list = file_r.readlines()
+    for i in book_list:
+        #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
+        book_materies = [x.strip() for x in i.split('; ')]
+        import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
+        list_ID.append(import_data.det_ID())
+        list_author.append(import_data.author_name())
+        list_book.append(import_data.book_name())
+    unique_list_ID = list(set(list_ID))
+    unique_list_author = list(set(list_author))
+    unique_list_book = list(set(list_book))
+    if ID:
+        return unique_list_ID
+    elif name:
+        return unique_list_book
+    elif author:
+        return unique_list_author
+
 
 def borrow_display(id_book = None):
     name_user = input('\nEnter your name: ')
@@ -228,11 +234,21 @@ def print_all_book(what_file = 'FileBook.txt'):
             book_materies = [x.strip() for x in i.split('; ')]
             import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
             data_list.append(import_data.__dict__)
+    else:
+        with open('FileBook.txt', 'r') as file_r:
+            book_list = file_r.readlines()
+        data_list = []
+        for i in book_list:
+            #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
+            book_materies = [x.strip() for x in i.split('; ')]
+            import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
+            list_ID.append(import_data.det_ID())
+            list_author.append(import_data.author_name())
+            data_list.append(import_data.__dict__)
     df = pd.DataFrame(data_list)
     df.index = range(1, len(df)+1)
         
     print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
-
 def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available, trends = 0):
             with open('FileBook.txt', 'a') as file_w:
                 with open('FileBook.txt', 'a+') as file_n:
@@ -428,5 +444,6 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
                 
                 
                 
+
 
 
