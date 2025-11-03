@@ -340,9 +340,9 @@ def top_trending():
 def use_data_client():    # Nhập id để tìm text xem có của người đó chưa, chưa thì tạo mớimới
     while True:
         print("\n=== Client Data Menu ===")
-        MSSV = input('Nhập ID khách hàng: ').upper()
+        MSSV = input('Enter ID customer : ').upper()
         if MSSV == "":
-            print('Quay lai menu...')
+            print('Back menu')
             break
 
 
@@ -352,23 +352,24 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
                     # Mở file nếu tồn tại
             with open(ID, 'r', encoding="utf-8") as f:
                 data = f.read()
-            print("\nThông tin khách hàng hiện tại:")
+            print("\nCurrent Customer Information:")
             print(data)
 
         except FileNotFoundError:
-            print(f"\nKhông tìm thấy file: {MSSV}")
-            client_name = input('Nhập tên người dùng mới: ').strip()
+            print(f"\nCustomer Information Not Found: {MSSV}")
+            client_name = input('Enter Information of New Customer: ').strip()
             with open(ID, 'w', encoding="utf-8") as f:
                 f.write(f"ID: {MSSV}\n")
                 f.write(f"Tên: {client_name}\n")
-                f.write("Sách đã mượn: (chưa có)\n")
-                f.write("Số ngày còn lại để trả: 0\n")
-            print(f"\nĐã tạo hồ sơ mới cho khách hàng {client_name} (ID: {MSSV})")
-            print("Sách đã mượn: (chưa có)")
-            print("Số ngày còn lại để trả: 0")
+                f.write("Borrowed books: (none yet)\n")
+                f.write("Number of days remaining to pay: 0\n")
+            print(f"\nA new profile has been created for the customer {client_name} (ID: {MSSV})")
+            print("The book has been borrowed: (not yet)")
+            print("Number of days remaining to pay: 0")
 
-        input("\nNhấn Enter để quay lại menu người dùng...")
-        break            
+        input("\nPress Enter to return to the user menu...")
+        break
+
             
             
             
@@ -415,4 +416,5 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
                 
                 
                 
+
 
