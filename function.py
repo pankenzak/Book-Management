@@ -2,47 +2,25 @@ import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
 
-LIST_OF_CATEGORY = {
-    1: "Fiction",
-    2: "Romance",
-    3: "Non-Fiction",
-    4: "Science Fiction",
-    5: "Fantasy",
-    6: "Mystery",
-    7: "Action & Adventure",
-    8: "Horror",
-    9: "Historical Fiction",
-    10: "Memoir & Autobiography",
-    11: "Self-Help",
-    12: "Comic & Graphic Novel"
-}
+def take_category():
+    with open('FileBook.txt', 'r') as f:
+        book_list = f.readlines() 
+    dict_category = {}
+    list_category = []
+    for line in book_list:
+        book_materies = [x.strip() for x in line.split('; ')]
+        list_category.append(book_materies[3])
+    set_category = set(list_category)
+    for idx, i in enumerate(set_category, 1):
+        new_dict = {idx: i}
+        dict_category.update(new_dict)
+        
+    return dict_category
 
-def unique_data(ID = False, name = False, author = False, category = False, year = False, producer = False, quantity = False, available = False, trends = False):
-    list_ID = []
-    list_author = []
-    list_book = []
-    with open('FileBook.txt', 'r') as file_r:
-        book_list = file_r.readlines()
-    for i in book_list:
-        #lay tung quyen sach ra trong list bang dau hieu '; ' va cat \n o quantity
-        book_materies = [x.strip() for x in i.split('; ')]
-        import_data = DataBook(book_materies[0], book_materies[1], book_materies[2], book_materies[3], book_materies[4], book_materies[5], book_materies[6], book_materies[7], book_materies[8])
-        list_ID.append(import_data.det_ID())
-        list_author.append(import_data.author_name())
-        list_book.append(import_data.book_name())
-    unique_list_ID = list(set(list_ID))
-    unique_list_author = list(set(list_author))
-    unique_list_book = list(set(list_book))
-    if ID:
-        return unique_list_ID
-    elif name:
-        return unique_list_book
-    elif author:
-        return unique_list_author
-
-def borrow_display(MSSV):
+def borrow_display(MSSV, id_book = None):
     
-    id_book = input('Enter the ID of the book you want to borrow: ')
+    if id_book == None:
+        id_book = input('Enter the ID of the book you want to borrow: ')
 
     with open('FileBook.txt', 'r') as file_r:
         book_list = file_r.readlines()
@@ -148,7 +126,25 @@ def search():
         # View all books
         if choice == 1:
             display_books(data_list)
-            input("\nPress Enter to continue...")
+            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
+            if borrow_or_back == 'R':
+                continue
+            else:
+                for i in acc:
+                    MSSV = i
+                borrow_display(MSSV, borrow_or_back)
+                with open("FileBook.txt", "r", encoding="utf-8") as f:
+                    book_list = f.readlines()
+                data_list = []
+                for line in book_list:
+                    parts = [x.strip() for x in line.split("; ")]
+                    if len(parts) == 9:
+                        import_data = DataBook(*parts)
+                        data_list.append(import_data.__dict__)
+
+                print("\n=== UPDATED BOOK LIST ===")
+                display_books(data_list)
+                
 
         # Search by Book's Name
         elif choice == 2:
@@ -158,8 +154,8 @@ def search():
                 print(f"{i}. {name}")
 
             try:
-                selected = int(input("\nSelect book number (0 to go back): "))
-                if selected == 0:
+                selected = int(input("\nSelect book number or enter 'R' to comeback: "))
+                if selected == 'R':
                     continue
                 name = names[selected - 1]
             except (ValueError, IndexError):
@@ -169,7 +165,24 @@ def search():
             filtered_books = [b for b in data_list if b["name_book"] == name]
             print(f"\n=== BOOKS BY {name.upper()} ===")
             display_books(filtered_books)
-            input("\nPress Enter to continue...")
+            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
+            if borrow_or_back == 'R':
+                continue
+            else:
+                for i in acc:
+                    MSSV = i
+                borrow_display(MSSV, borrow_or_back)
+                with open("FileBook.txt", "r", encoding="utf-8") as f:
+                    book_list = f.readlines()
+                data_list = []
+                for line in book_list:
+                    parts = [x.strip() for x in line.split("; ")]
+                    if len(parts) == 9:
+                        import_data = DataBook(*parts)
+                        data_list.append(import_data.__dict__)
+
+                print("\n=== UPDATED BOOK LIST ===")
+                display_books(data_list)
             
         # Search by Author
         elif choice == 3:
@@ -190,11 +203,29 @@ def search():
             filtered_books = [b for b in data_list if b["author"] == author_name]
             print(f"\n=== BOOKS BY {author_name.upper()} ===")
             display_books(filtered_books)
-            input("\nPress Enter to continue...")    
+            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
+            if borrow_or_back == 'R':
+                continue
+            else:
+                for i in acc:
+                    MSSV = i
+                borrow_display(MSSV, borrow_or_back)
+                with open("FileBook.txt", "r", encoding="utf-8") as f:
+                    book_list = f.readlines()
+                data_list = []
+                for line in book_list:
+                    parts = [x.strip() for x in line.split("; ")]
+                    if len(parts) == 9:
+                        import_data = DataBook(*parts)
+                        data_list.append(import_data.__dict__)
+
+                print("\n=== UPDATED BOOK LIST ===")
+                display_books(data_list)    
 
         # Search by Category
         elif choice == 4:
             print("\n=== CATEGORIES ===")
+            LIST_OF_CATEGORY = take_category()
             for number, name in LIST_OF_CATEGORY.items():
                 print(f"{number}. {name}")
 
@@ -211,7 +242,24 @@ def search():
             filtered_books = [b for b in data_list if b["category"].lower() == category_name.lower()]
             print(f"\n=== BOOKS IN CATEGORY: {category_name.upper()} ===")
             display_books(filtered_books)
-            input("\nPress Enter to continue...")
+            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
+            if borrow_or_back == 'R':
+                continue
+            else:
+                for i in acc:
+                    MSSV = i
+                borrow_display(MSSV, borrow_or_back)
+                with open("FileBook.txt", "r", encoding="utf-8") as f:
+                    book_list = f.readlines()
+                data_list = []
+                for line in book_list:
+                    parts = [x.strip() for x in line.split("; ")]
+                    if len(parts) == 9:
+                        import_data = DataBook(*parts)
+                        data_list.append(import_data.__dict__)
+
+                print("\n=== UPDATED BOOK LIST ===")
+                display_books(data_list)
 
         elif choice == 5:
             back_search = True
@@ -369,7 +417,6 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
             print('Back menu')
             break
 
-
         ID = f"{MSSV}.txt"
 
         try:
@@ -395,10 +442,11 @@ def use_data_client():    # Nhập id để tìm text xem có của người đ�
         break
 
             
-            
+acc = []            
 def login_user():
     print("\n=== USER LOGIN ===")
     MSSV = input("Nhập ID khách hàng (vd: SE203900): ").upper()
+    acc.append(MSSV)
     file_name = f"{MSSV}.txt"
 
     try:
@@ -422,6 +470,8 @@ def login_user():
         return MSSV            
             
             
+
+
             
             
             
@@ -434,35 +484,7 @@ def login_user():
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-         
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+               
 
 
 
