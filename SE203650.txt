@@ -1,0 +1,7 @@
+ID: SE203650
+NAME: Le Nhat Khanh
+PASSWORD: 123
+Borrowed books: 
+BRW-20251105-051023-SE203650-1879, SE203650, Le Nhat Khanh, To Kill a Mockingbird, 05/11/2025, 12/11/2025, 0, Returned, Return
+BRW-20251105-051310-SE203650-1715, SE203650, Le Nhat Khanh, Harry Potter and the Philosopher's Stone, 05/11/2025, 12/11/2025, 0, Returned, Return
+BRW-20251105-051337-SE203650-4798, SE203650, Le Nhat Khanh, The Hobbit, 05/11/2025, 12/11/2025, 0, Returned, Return

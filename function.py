@@ -2,7 +2,59 @@ import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
 from data_book import DataBook
 from datetime import datetime, timedelta
+from borrowed_books import BorrowedBook
+import random as r
 
+def next_day():
+    mssv = acc[0]
+    user_path = f'{mssv}.txt'
+
+    # 1) Đọc toàn bộ file một lần
+    with open(user_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    # 2) Giữ lại các header và gom tất cả record BRW-… vào list
+    headers = []
+    brw_rows = []
+    full_name = ''
+    passw = ''
+
+    for line in lines:
+        if line.startswith('ID:') or line.startswith('NAME:') or line.startswith('PASSWORD:'):
+            headers.append(line if line.endswith('\n') else line + '\n')
+            if line.startswith('NAME:'):
+                full_name = line.split('NAME: ', 1)[1].strip()
+            if line.startswith('PASSWORD:'):
+                passw = line.split('PASSWORD: ', 1)[1].strip()
+        elif line.strip().startswith('Borrowed books:'):
+            # sẽ in lại tiêu đề này sau, bỏ qua ở đây để tránh trùng
+            continue
+        elif line.startswith('BRW-'):
+            parts = [x.strip() for x in line.split(', ')]
+            # parts[6] = countdown, parts[7] = status
+            days = int(parts[6])
+            if days <= 1:
+                parts[6] = '0'
+                parts[7] = 'Returned'     # <-- dùng phép gán, không phải ==
+            else:
+                parts[6] = str(days - 1)
+                # nếu muốn tự chuyển status khi vẫn mượn:
+                if parts[7].lower().startswith('return'):
+                    parts[7] = 'Borrowing'
+            brw_rows.append(', '.join(parts) + '\n')
+        else:
+            # Bỏ qua các dòng khác (nếu có), hoặc bạn có thể append nếu muốn giữ
+            continue
+
+    # 3) Ghi lại file **một lần duy nhất**
+    with open(user_path, 'w', encoding='utf-8') as f:
+        for h in headers:
+            f.write(h)
+        f.write('Borrowed books: \n')
+        for row in brw_rows:
+            f.write(row)
+
+    
 def take_category():
     with open('FileBook.txt', 'r') as f:
         book_list = f.readlines() 
@@ -30,9 +82,11 @@ def borrow_display(MSSV, id_book = None):
     updated_list = []
     trend = False
     trend_id = None
+    
 
     for line in book_list:
         book_materies = [x.strip() for x in line.split('; ')]
+
         if book_materies[0] == id_book:
             found = True
             quantity = int(book_materies[6])
@@ -49,38 +103,61 @@ def borrow_display(MSSV, id_book = None):
             updated_list.append('; '.join(book_materies))
         else:
             updated_list.append(line.strip())
-
+    
     with open('FileBook.txt', 'w', encoding='utf-8') as file_w:
         if updated_list:
             file_w.write('\n'.join(updated_list) + '\n')
-            
+    
+    
     if found and quantity > 0:
         # Cập nhật file người dùng
         user_file = f"{MSSV}.txt"
+        
         try:
             # cái này dùng để đếm ngày
             today = datetime.now()
+            today_str = today.strftime("%d/%m/%Y")
             return_date = today + timedelta(days=7)
+            return_date_str = return_date.strftime("%d/%m/%Y")
             remaining_days = 7
             # Đọc nội dung hiện tại
             with open(user_file, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
+            ID = random_borrow_id(MSSV)
+            for i in lines:
+                if i.startswith("NAME:"):
+                    full_name = i.replace("NAME:", "").strip()
+            status = 'Borrowing'
+            action = 'Return'
 
             # Cập nhật dòng "Sách đã mượn:"
             for i in range(len(lines)):
-                if lines[i].startswith("Borrowed books:"):
-                    current_books = lines[i].replace("Borrowed books:", "").strip()
+                if lines[i].startswith("Borrowed books table:"):
+                    current_books = lines[i].replace("Borrowed books table:", "").strip()
                     if current_books == "(chưa có)" or current_books == "":
-                        lines[i] = f"Borrowed books: {borrowed_book_name}\n"
+                        lines[i] = f"Borrowed books table:\n"
                     else:
-                        lines[i] = f"Borrowed books: {current_books}, {borrowed_book_name}\n"
+                        lines[i] = f"{lines[i].rstrip()}\n{ID}, {MSSV}, {full_name}, {borrowed_book_name}, {today_str}, {return_date_str}, {remaining_days}, {status}, {action}\n"
                 elif lines[i].startswith("Number of days left to pay:"):
                     lines[i] = f"Number of days left to pay: {remaining_days}\n"
 
             # Ghi lại file người dùng
+            # 1) Ghi lại toàn bộ lines như cũ
             with open(user_file, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
-                f.write(f"Book borrowing date: {today.strftime('%d/%m/%Y')}, Book return date: {return_date.strftime('%d/%m/%Y')}\n")
+
+            # 2) Đảm bảo có newline cuối file rồi mới append record (COPY y hệt kiểu ở add_book)
+            record = (f"{ID}, {MSSV}, {full_name}, {borrowed_book_name}, "
+                      f"{today_str}, {return_date_str}, {remaining_days}, {status}, {action}")
+
+            with open(user_file, 'a+', encoding='utf-8') as tail:
+                tail.seek(0, 2)                # nhảy tới cuối file
+                if tail.tell() > 0:
+                    tail.seek(tail.tell() - 1)
+                    if tail.read(1) != '\n':   # nếu cuối file chưa có newline thì chèn
+                        tail.write('\n')
+                tail.write(record + '\n')       # append record + newline
+
 
             print(f"Borrower information saved in file {user_file}")
 
@@ -95,17 +172,41 @@ def borrow_display(MSSV, id_book = None):
 
     print("\nBook list has been updated successfully.")
 
+def borrowed_books_table(MSSV):
+    with open(f'{MSSV}.txt', 'r') as f:
+        lines = f.readlines()
+    
+    borrow_list = []    
+    for line in lines:
+        materies = [x.strip() for x in line.split(', ')]
+        if line.startswith("Borrowed books: "):
+            # xử lý khi gặp dòng tiêu đề "Borrowed books:"
+            continue
+        elif line.startswith("BRW-"):
+            # các dòng chứa chi tiết sách mượn
+            declare = BorrowedBook(materies[0], materies[1], materies[2], materies[3], materies[4], materies[5], materies[6], materies[7], materies[8])
+            borrow_list.append(declare.__dict__)
+    
+    df = pd.DataFrame(borrow_list)
+    df.index = range(1, len(df)+1)
+        
+    print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
 
 def display_books(data_list):
     """Hiển thị danh sách sách theo dạng bảng."""
     if not data_list:
         print("\nNo books available.\n")
         return
-
+    
     df = pd.DataFrame(data_list)
     df.index = range(1, len(df) + 1)
     print(tabulate(df, headers='keys', tablefmt='grid', showindex=True, stralign='left'))
 
+def random_borrow_id(MSSV):
+    now = datetime.now()
+    date_part = now.strftime("%Y%m%d-%H%M%S")
+    rand_part = r.randint(1000, 9999)
+    return f"BRW-{date_part}-{MSSV}-{rand_part}"
 
 def search():
     
@@ -432,8 +533,13 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
 
         print("\n=== Thông tin khách hàng hiện tại ===")
         for line in lines:
-            if not line.startswith("Password:"):  # ẩn mật khẩu
+            if line.startswith("PASSWORD:") or line.startswith("BRW-"):  # ẩn mật khẩu
+                continue
+            else:
                 print(line.strip())
+        for line in lines:
+            if line.startswith("Borrowed books: \n"):
+                borrowed_books_table(MSSV)
 
     except FileNotFoundError:
         print("Customer profile does not exist yet.")
@@ -467,7 +573,14 @@ def login_user():
 
                 with open(file_name, 'r', encoding='utf-8') as f:
                     print("\nCurrent customer information:")
-                    print(f.read())
+                    for line in lines:
+                        if line.startswith("PASSWORD:") or line.startswith("BRW-"):  # ẩn mật khẩu
+                            continue
+                        else:
+                            print(line.strip())
+                    for line in lines:
+                        if line.startswith("Borrowed books: \n"):
+                            borrowed_books_table(MSSV)
                 return MSSV
             else:
                 attempts -= 1
@@ -496,7 +609,7 @@ def login_user():
             f.write(f"ID: {MSSV}\n")
             f.write(f"NAME: {name}\n")
             f.write(f"PASSWORD: {password}\n")
-            f.write("Borrowed books:\n")
+            f.write("Borrowed books table:\n")
         print(f"\nA new profile has been created for the customer. {name} (ID: {MSSV})")
         return MSSV            
             
