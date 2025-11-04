@@ -41,7 +41,7 @@ def borrow_display(MSSV, id_book = None):
                 borrowed_book_name = book_materies[1]
                 if book_materies[6] == '0':
                     book_materies[7] = 'False'
-                print(f"\nBạn đã mượn thành công: {borrowed_book_name}")
+                print(f"\nYou have successfully borrowed: {borrowed_book_name}")
                 trend = True
                 trend_id = book_materies[0]     
             else:
@@ -68,24 +68,24 @@ def borrow_display(MSSV, id_book = None):
 
             # Cập nhật dòng "Sách đã mượn:"
             for i in range(len(lines)):
-                if lines[i].startswith("Sách đã mượn:"):
+                if lines[i].startswith("Borrowed books:"):
                     current_books = lines[i].replace("Sách đã mượn:", "").strip()
                     if current_books == "(chưa có)" or current_books == "":
-                        lines[i] = f"Sách đã mượn: {borrowed_book_name}\n"
+                        lines[i] = f"Borrowed books: {borrowed_book_name}\n"
                     else:
-                        lines[i] = f"Sách đã mượn: {current_books}, {borrowed_book_name}\n"
-                elif lines[i].startswith("Số ngày còn lại để trả:"):
-                    lines[i] = f"Số ngày còn lại để trả: {remaining_days}\n"
+                        lines[i] = f"Borrowed books: {current_books}, {borrowed_book_name}\n"
+                elif lines[i].startswith("Number of days left to pay:"):
+                    lines[i] = f"Number of days left to pay: {remaining_days}\n"
 
             # Ghi lại file người dùng
             with open(user_file, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
-                f.write(f"Ngày mượn: {today.strftime('%d/%m/%Y')}, Ngày trả: {return_date.strftime('%d/%m/%Y')}\n")
+                f.write(f"Book borrowing date: {today.strftime('%d/%m/%Y')}, Book return date: {return_date.strftime('%d/%m/%Y')}\n")
 
-            print(f"Đã lưu thông tin mượn vào hồ sơ {user_file}")
+            print(f"Borrower information saved in file {user_file}")
 
         except Exception as e:
-            print("Lỗi khi ghi file người dùng:", e)
+            print("Error writing user account:", e)
 
     if trend and trend_id:
         update_book(True, trend_id)
@@ -420,7 +420,7 @@ def top_trending():
                       
 def use_data_client():    # kiểm tra để xem thông tin khách hàng
     if not acc:
-        print("⚠️ Vui lòng đăng nhập trước.")
+        print("Please log in first.")
         return
 
     MSSV = acc[0]
@@ -432,11 +432,11 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
 
         print("\n=== Thông tin khách hàng hiện tại ===")
         for line in lines:
-            if not line.startswith("Mật khẩu:"):  # ẩn mật khẩu
+            if not line.startswith("Password:"):  # ẩn mật khẩu
                 print(line.strip())
 
     except FileNotFoundError:
-        print("⚠️ Hồ sơ khách hàng chưa tồn tại.")
+        print("Customer profile does not exist yet.")
 
     input("\nPress Enter to return to the user menu...")
             
@@ -452,33 +452,33 @@ def login_user():
         # Nếu có file → đọc thông tin
         with open(file_name, 'r', encoding='utf-8') as f:
             lines = f.readlines()
-        password_line = next((line for line in lines if line.startswith("MẬT KHẨU:")), None)
+        password_line = next((line for line in lines if line.startswith("PASSWORD:")), None)
         if not password_line:
-            print("❌ Hồ sơ bị thiếu mật khẩu. Vui lòng tạo lại.")
+            print("Profile is missing password. Please create again.")
             return None
         
-        stored_password = password_line.replace("MẬT KHẨU:", "").strip()
-        entered_password = input("Nhập mật khẩu: ").strip()
+        stored_password = password_line.replace("PASSWORD:", "").strip()
+        entered_password = input("Enter password: ").strip()
 
-        print("\n✅ Đăng nhập thành công!")
+        print("\n✅ Login successful!")
         update_remaining_days(MSSV)
         with open(file_name, 'r', encoding='utf-8') as f:
-            print("\nThông tin khách hàng hiện tại:")
+            print("\nCurrent customer information:")
             print(f.read())
         return MSSV  # trả về ID để dùng cho các thao tác sau
         
     except FileNotFoundError:
         # Nếu chưa có file sẽ tạo mới ở đây
-        print("\nChưa có thông tin khách hàng. Tạo hồ sơ mới.")
-        name = input("Nhập tên khách hàng: ").strip()
-        password = input("Tạo mật khẩu: ").strip()
+        print("\nNo customer information yet. Create new profile.")
+        name = input("Enter customer name: ").strip()
+        password = input("Create a password: ").strip()
         
         with open(file_name, 'w', encoding='utf-8') as f:
             f.write(f"ID: {MSSV}\n")
-            f.write(f"Tên: {name}\n")
-            f.write(f"MẬT KHẨU: {password}\n")
-            f.write("Sách đã mượn:\n")
-        print(f"\nHồ sơ mới đã được tạo cho khách hàng {name} (ID: {MSSV})")
+            f.write(f"NAME: {name}\n")
+            f.write(f"PASSWORD: {password}\n")
+            f.write("Borrowed books:\n")
+        print(f"\nA new profile has been created for the customer. {name} (ID: {MSSV})")
         return MSSV            
             
             
@@ -495,7 +495,7 @@ def update_remaining_days(MSSV):
         for line in lines:
             if "Ngày trả:" in line:
                 try:
-                    date_part = line.split("Ngày trả:")[1].strip()
+                    date_part = line.split("Book return date:")[1].strip()
                     return_date = datetime.strptime(date_part, "%d/%m/%Y")
                 except:
                     pass
@@ -510,13 +510,13 @@ def update_remaining_days(MSSV):
             # Cập nhật hoặc thêm dòng "Số ngày còn lại để trả"
             found = False
             for i, line in enumerate(lines):
-                if line.startswith("Số ngày còn lại để trả:"):
-                    lines[i] = f"Số ngày còn lại để trả: {remaining_days}\n"
+                if line.startswith("Number of days left to pay:"):
+                    lines[i] = f"Number of days left to pay: {remaining_days}\n"
                     found = True
                     break
 
             if not found:
-                lines.append(f"Số ngày còn lại để trả: {remaining_days}\n")
+                lines.append(f"Number of days left to pay: {remaining_days}\n")
 
             with open(user_file, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
@@ -535,6 +535,7 @@ def update_remaining_days(MSSV):
             
             
                
+
 
 
 
