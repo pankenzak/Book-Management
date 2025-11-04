@@ -38,6 +38,8 @@ def borrow_display(MSSV, id_book = None):
             if quantity > 0:
                 book_materies[6] = str(quantity - 1)
                 borrowed_book_name = book_materies[1]
+                if book_materies[6] == '0':
+                    book_materies[7] = 'False'
                 print(f"\nBạn đã mượn thành công: {borrowed_book_name}")
                 trend = True
                 trend_id = book_materies[0]     

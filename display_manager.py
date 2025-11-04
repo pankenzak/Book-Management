@@ -10,6 +10,8 @@ def use_data_book():
                 print_all_book()
                 
             elif to_do_1 == 2:
+                with open('FileBook.txt', 'r') as f:
+                    book_list = f.readlines()
                 id_book = input('\nEnter id book: ')
                 name_book = input('Enter book name: ')
                 author = input('Enter author name: ')
@@ -18,7 +20,19 @@ def use_data_book():
                 producer = input('Enter producer: ')
                 quantity = int(input('Enter quantity: '))
                 available = quantity > 0
-                add_book(id_book, name_book, author, category, publication_year, producer, quantity, available)
+                
+                for i in book_list:
+                    book_materies = [x.strip() for x in i.split('; ')]
+                    if id_book == book_materies[0]:
+                        print('Your ID book has already exist. Please Enter another ID book!')
+                        check = False
+                        continue
+                    elif name_book == book_materies[1]:
+                        print('Your book has already exist. Please Enter another book!')
+                        continue
+                    else:
+                        continue   
+                    add_book(id_book, name_book, author, category, publication_year, producer, quantity, available)
                 
             elif to_do_1 == 3:
                 select_book = input('\nEnter the ID book: ')
@@ -33,7 +47,7 @@ def use_data_book():
                 continue_or_stop = input('\nWrong input\nIf you want to continue the program please enter "continue" to do\nIf not please enter "stop"\nYour choice: ')
                 if continue_or_stop == 'stop':
                   back = True
-        
+
 def manager_menu():
   back = False
   while back == False:  #while nay dung de back cua phan lua chon lam gi
