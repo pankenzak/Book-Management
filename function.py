@@ -69,7 +69,7 @@ def borrow_display(MSSV, id_book = None):
             # Cập nhật dòng "Sách đã mượn:"
             for i in range(len(lines)):
                 if lines[i].startswith("Borrowed books:"):
-                    current_books = lines[i].replace("Sách đã mượn:", "").strip()
+                    current_books = lines[i].replace("Borrowed books:", "").strip()
                     if current_books == "(chưa có)" or current_books == "":
                         lines[i] = f"Borrowed books: {borrowed_book_name}\n"
                     else:
@@ -443,7 +443,7 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
 acc = []            
 def login_user():
     print("\n=== USER LOGIN ===")
-    MSSV = input("Nhập ID khách hàng (vd: SE203900): ").upper()
+    MSSV = input("Enter customer ID (vd: SE203900): ").upper()
     acc.clear()
     acc.append(MSSV)
     file_name = f"{MSSV}.txt"
@@ -460,7 +460,7 @@ def login_user():
         stored_password = password_line.replace("PASSWORD:", "").strip()
         entered_password = input("Enter password: ").strip()
 
-        print("\n✅ Login successful!")
+        print("\nLogin successful!")
         update_remaining_days(MSSV)
         with open(file_name, 'r', encoding='utf-8') as f:
             print("\nCurrent customer information:")
@@ -535,6 +535,7 @@ def update_remaining_days(MSSV):
             
             
                
+
 
 
 
