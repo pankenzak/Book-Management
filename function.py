@@ -456,9 +456,28 @@ def login_user():
         if not password_line:
             print("Profile is missing password. Please create again.")
             return None
-        
+        # kiển tra pass ở dây
         stored_password = password_line.replace("PASSWORD:", "").strip()
-        entered_password = input("Enter password: ").strip()
+        attempts = 3
+        while attempts > 0:
+            entered_password = input("Enter password: ").strip()
+            if entered_password == stored_password:
+                print("\nLogin successful!")
+                update_remaining_days(MSSV)
+
+                with open(file_name, 'r', encoding='utf-8') as f:
+                    print("\nCurrent customer information:")
+                    print(f.read())
+                return MSSV
+            else:
+                attempts -= 1
+                if attempts > 0:
+                    print(f"Wrong password! You have {attempts} attempt(s) left.\n")
+                else:
+                    print("Wrong password 3 times. Returning to main menu.\n")
+                    import main   
+                    main.main()  
+                    return
 
         print("\nLogin successful!")
         update_remaining_days(MSSV)
@@ -535,6 +554,7 @@ def update_remaining_days(MSSV):
             
             
                
+
 
 
 
