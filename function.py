@@ -200,7 +200,7 @@ def return_book():
     full_name = ''
     passw = ''
 
-    ID = input('Enter ID borrow book (vd: 1879 hoặc BRW-2025...-1879): ').strip()
+    ID = input('Enter ID borrow book (EX: 1879 Or BRW-2025...-1879): ').strip()
     found = False
 
     for line in lines:
@@ -248,9 +248,9 @@ def return_book():
             f.write(row)
 
     if found:
-        print('✔ Đã cập nhật trạng thái: Returned.')
+        print('Status has been updated. : Returned.')
     else:
-        print('⚠ Không tìm thấy mã mượn khớp ID bạn nhập.')
+        print(' No matching borrow code found for the ID you entered..')
 
 
 def borrowed_books_table(MSSV):
@@ -274,7 +274,7 @@ def borrowed_books_table(MSSV):
     print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
 
 def display_books(data_list):
-    """Hiển thị danh sách sách theo dạng bảng."""
+    """Display the list of books in a table format.."""
     if not data_list:
         print("\nNo books available.\n")
         return
@@ -317,8 +317,8 @@ def search():
         # View all books
         if choice == 1:
             display_books(data_list)
-            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
-            if borrow_or_back == 'R':
+            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+            if borrow_or_back == 'Enter':
                 continue
             else:
                 for i in acc:
@@ -345,8 +345,8 @@ def search():
                 print(f"{i}. {name}")
 
             try:
-                selected = int(input("\nSelect book number or enter 'R' to comeback: "))
-                if selected == 'R':
+                selected = int(input("\nSelect book number or Enter to comeback: "))
+                if selected == 'Enter':
                     continue
                 name = names[selected - 1]
             except (ValueError, IndexError):
@@ -356,8 +356,8 @@ def search():
             filtered_books = [b for b in data_list if b["name_book"] == name]
             print(f"\n=== BOOKS BY {name.upper()} ===")
             display_books(filtered_books)
-            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
-            if borrow_or_back == 'R':
+            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+            if borrow_or_back == 'Enter':
                 continue
             else:
                 for i in acc:
@@ -394,8 +394,8 @@ def search():
             filtered_books = [b for b in data_list if b["author"] == author_name]
             print(f"\n=== BOOKS BY {author_name.upper()} ===")
             display_books(filtered_books)
-            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
-            if borrow_or_back == 'R':
+            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+            if borrow_or_back == 'Enter':
                 continue
             else:
                 for i in acc:
@@ -433,8 +433,8 @@ def search():
             filtered_books = [b for b in data_list if b["category"].lower() == category_name.lower()]
             print(f"\n=== BOOKS IN CATEGORY: {category_name.upper()} ===")
             display_books(filtered_books)
-            borrow_or_back = input("Enter ID book to borrow a book or enter 'R' to comeback: ")
-            if borrow_or_back == 'R':
+            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+            if borrow_or_back == 'Enter':
                 continue
             else:
                 for i in acc:
@@ -612,7 +612,7 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
         with open(file_name, 'r', encoding='utf-8') as f:
             lines = f.readlines()
 
-        print("\n=== Thông tin khách hàng hiện tại ===")
+        print("\n=== Current customer information. ===")
         for line in lines:
             if line.startswith("PASSWORD:") or line.startswith("BRW-"):  # ẩn mật khẩu
                 continue
@@ -628,14 +628,14 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
     except FileNotFoundError:
         print("Customer profile does not exist yet.")
 
-    return_or_back = input("\nEnter 'R' to return book or Press Enter to return to the user menu...")
-    if return_or_back.upper() == 'R':
+    return_or_back = input("\nPress Enter to return to the user menu...")
+    if return_or_back.upper() == 'Enter':
         return_book()
             
 acc = []            
 def login_user():
     print("\n=== USER LOGIN ===")
-    MSSV = input("Enter customer ID (vd: SE203900): ").upper()
+    MSSV = input("Enter customer ID (EX: SE203900): ").upper()
     acc.clear()
     acc.append(MSSV)
     file_name = f"{MSSV}.txt"
