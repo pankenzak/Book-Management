@@ -21,6 +21,7 @@ def use_data_book():
                 quantity = int(input('Enter quantity: '))
                 available = quantity > 0
                 
+                check = True
                 for i in book_list:
                     book_materies = [x.strip() for x in i.split('; ')]
                     if id_book == book_materies[0]:
@@ -29,9 +30,11 @@ def use_data_book():
                         continue
                     elif name_book == book_materies[1]:
                         print('Your book has already exist. Please Enter another book!')
+                        check = False
                         continue
                     else:
                         continue   
+                if check:
                     add_book(id_book, name_book, author, category, publication_year, producer, quantity, available)
                 
             elif to_do_1 == 3:
