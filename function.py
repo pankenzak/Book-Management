@@ -20,31 +20,45 @@ def next_day():
     passw = ''
 
     for line in lines:
-        if line.startswith('ID:') or line.startswith('NAME:') or line.startswith('PASSWORD:'):
+        # 1) Header
+        if line.startswith(('ID:', 'NAME:', 'PASSWORD:')):
             headers.append(line if line.endswith('\n') else line + '\n')
             if line.startswith('NAME:'):
                 full_name = line.split('NAME: ', 1)[1].strip()
             if line.startswith('PASSWORD:'):
                 passw = line.split('PASSWORD: ', 1)[1].strip()
-        elif line.strip().startswith('Borrowed books:'):
-            # sẽ in lại tiêu đề này sau, bỏ qua ở đây để tránh trùng
             continue
-        elif line.startswith('BRW-'):
-            parts = [x.strip() for x in line.split(', ')]
+
+        # 2) Bỏ qua tiêu đề bảng (sẽ ghi lại sau)
+        if line.strip().startswith('Borrowed books:'):
+            continue
+
+        # 3) Bản ghi mượn sách
+        if line.startswith('BRW-'):
+            parts = [x.strip() for x in line.rstrip('\n').split(', ')]
             # parts[6] = countdown, parts[7] = status
-            days = int(parts[6])
-            if days <= 1:
-                parts[6] = '0'
-                parts[7] = 'Returned'     # <-- dùng phép gán, không phải ==
+
+            if parts[7] == 'Returned':
+                # Giữ nguyên record đã trả
+                brw_rows.append(', '.join(parts) + '\n')
             else:
-                parts[6] = str(days - 1)
-                # nếu muốn tự chuyển status khi vẫn mượn:
-                if parts[7].lower().startswith('return'):
-                    parts[7] = 'Borrowing'
-            brw_rows.append(', '.join(parts) + '\n')
-        else:
-            # Bỏ qua các dòng khác (nếu có), hoặc bạn có thể append nếu muốn giữ
+                # Giảm ngày, tự động đổi status khi hết hạn
+                try:
+                    days = int(parts[6])
+                except ValueError:
+                    days = 0
+                if days <= 1:
+                    parts[6] = '0'
+                    parts[7] = 'Returned'
+                else:
+                    parts[6] = str(days - 1)
+                    if parts[7].lower().startswith('return'):
+                        parts[7] = 'Borrowing'
+                brw_rows.append(', '.join(parts) + '\n')
             continue
+
+        continue
+
 
     # 3) Ghi lại file **một lần duy nhất**
     with open(user_path, 'w', encoding='utf-8') as f:
@@ -171,6 +185,73 @@ def borrow_display(MSSV, id_book = None):
         print(f'\nBook with ID {id_book} not found')
 
     print("\nBook list has been updated successfully.")
+
+def return_book():
+    mssv = acc[0]
+    user_path = f'{mssv}.txt'
+
+    # 1) Đọc file một lần
+    with open(user_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    # 2) Tách header và gom các dòng BRW-...
+    headers = []
+    brw_rows = []
+    full_name = ''
+    passw = ''
+
+    ID = input('Enter ID borrow book (vd: 1879 hoặc BRW-2025...-1879): ').strip()
+    found = False
+
+    for line in lines:
+        if line.startswith(('ID:', 'NAME:', 'PASSWORD:')):
+            # giữ nguyên header
+            if not line.endswith('\n'):
+                line += '\n'
+            headers.append(line)
+            if line.startswith('NAME:'):
+                full_name = line.split('NAME: ', 1)[1].strip()
+            elif line.startswith('PASSWORD:'):
+                passw = line.split('PASSWORD: ', 1)[1].strip()
+
+        elif line.strip().startswith('Borrowed books:'):
+            # sẽ viết lại tiêu đề này sau
+            continue
+
+        elif line.startswith('BRW-'):
+            # xử lý từng record mượn
+            parts = [x.strip() for x in line.rstrip('\n').split(', ')]
+            borrow_code = parts[0]
+
+            # Cho phép nhập full code hoặc chỉ 4 số cuối
+            is_target = (ID == borrow_code) or borrow_code.endswith(ID)
+
+            if is_target:
+                # cập nhật tình trạng & hành động
+                parts[7] = 'Returned'      # status
+                parts[8] = '-'             # action (không còn hành động)
+                found = True
+
+            # đưa lại vào danh sách để ghi
+            brw_rows.append(', '.join(parts) + '\n')
+
+        else:
+            # các dòng khác (nếu có) thì bỏ qua hoặc giữ tùy bạn
+            continue
+
+    # 3) Ghi lại file một lần
+    with open(user_path, 'w', encoding='utf-8') as f:
+        for h in headers:
+            f.write(h)
+        f.write('Borrowed books: \n')
+        for row in brw_rows:
+            f.write(row)
+
+    if found:
+        print('✔ Đã cập nhật trạng thái: Returned.')
+    else:
+        print('⚠ Không tìm thấy mã mượn khớp ID bạn nhập.')
+
 
 def borrowed_books_table(MSSV):
     with open(f'{MSSV}.txt', 'r') as f:
@@ -537,14 +618,19 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
                 continue
             else:
                 print(line.strip())
+        table = False
         for line in lines:
-            if line.startswith("Borrowed books: \n"):
-                borrowed_books_table(MSSV)
+            if line.startswith("BRW-"):
+                table = True
+        if table:
+            borrowed_books_table(MSSV)
 
     except FileNotFoundError:
         print("Customer profile does not exist yet.")
 
-    input("\nPress Enter to return to the user menu...")
+    return_or_back = input("\nEnter 'R' to return book or Press Enter to return to the user menu...")
+    if return_or_back.upper() == 'R':
+        return_book()
             
 acc = []            
 def login_user():
