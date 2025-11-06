@@ -289,7 +289,7 @@ def random_borrow_id(MSSV):
     rand_part = r.randint(1000, 9999)
     return f"BRW-{date_part}-{MSSV}-{rand_part}"
 
-def search():
+def search(manager = False):
     
     try:
         with open("FileBook.txt", "r", encoding="utf-8") as f:
@@ -317,24 +317,27 @@ def search():
         # View all books
         if choice == 1:
             display_books(data_list)
-            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
-            if borrow_or_back == 'Enter':
+            if manager:
                 continue
             else:
-                for i in acc:
-                    MSSV = i
-                borrow_display(MSSV, borrow_or_back)
-                with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    book_list = f.readlines()
-                data_list = []
-                for line in book_list:
-                    parts = [x.strip() for x in line.split("; ")]
-                    if len(parts) == 9:
-                        import_data = DataBook(*parts)
-                        data_list.append(import_data.__dict__)
+                borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+                if borrow_or_back == 'Enter':
+                    continue
+                else:
+                    for i in acc:
+                        MSSV = i
+                    borrow_display(MSSV, borrow_or_back)
+                    with open("FileBook.txt", "r", encoding="utf-8") as f:
+                        book_list = f.readlines()
+                    data_list = []
+                    for line in book_list:
+                        parts = [x.strip() for x in line.split("; ")]
+                        if len(parts) == 9:
+                            import_data = DataBook(*parts)
+                            data_list.append(import_data.__dict__)
 
-                print("\n=== UPDATED BOOK LIST ===")
-                display_books(data_list)
+                    print("\n=== UPDATED BOOK LIST ===")
+                    display_books(data_list)
                 
 
         # Search by Book's Name
@@ -356,24 +359,27 @@ def search():
             filtered_books = [b for b in data_list if b["name_book"] == name]
             print(f"\n=== BOOKS BY {name.upper()} ===")
             display_books(filtered_books)
-            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
-            if borrow_or_back == 'Enter':
+            if manager:
                 continue
             else:
-                for i in acc:
-                    MSSV = i
-                borrow_display(MSSV, borrow_or_back)
-                with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    book_list = f.readlines()
-                data_list = []
-                for line in book_list:
-                    parts = [x.strip() for x in line.split("; ")]
-                    if len(parts) == 9:
-                        import_data = DataBook(*parts)
-                        data_list.append(import_data.__dict__)
+                borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+                if borrow_or_back == 'Enter':
+                    continue
+                else:
+                    for i in acc:
+                        MSSV = i
+                    borrow_display(MSSV, borrow_or_back)
+                    with open("FileBook.txt", "r", encoding="utf-8") as f:
+                        book_list = f.readlines()
+                    data_list = []
+                    for line in book_list:
+                        parts = [x.strip() for x in line.split("; ")]
+                        if len(parts) == 9:
+                            import_data = DataBook(*parts)
+                            data_list.append(import_data.__dict__)
 
-                print("\n=== UPDATED BOOK LIST ===")
-                display_books(data_list)
+                    print("\n=== UPDATED BOOK LIST ===")
+                    display_books(data_list)
             
         # Search by Author
         elif choice == 3:
@@ -394,24 +400,27 @@ def search():
             filtered_books = [b for b in data_list if b["author"] == author_name]
             print(f"\n=== BOOKS BY {author_name.upper()} ===")
             display_books(filtered_books)
-            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
-            if borrow_or_back == 'Enter':
+            if manager:
                 continue
             else:
-                for i in acc:
-                    MSSV = i
-                borrow_display(MSSV, borrow_or_back)
-                with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    book_list = f.readlines()
-                data_list = []
-                for line in book_list:
-                    parts = [x.strip() for x in line.split("; ")]
-                    if len(parts) == 9:
-                        import_data = DataBook(*parts)
-                        data_list.append(import_data.__dict__)
+                borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+                if borrow_or_back == 'Enter':
+                    continue
+                else:
+                    for i in acc:
+                        MSSV = i
+                    borrow_display(MSSV, borrow_or_back)
+                    with open("FileBook.txt", "r", encoding="utf-8") as f:
+                        book_list = f.readlines()
+                    data_list = []
+                    for line in book_list:
+                        parts = [x.strip() for x in line.split("; ")]
+                        if len(parts) == 9:
+                            import_data = DataBook(*parts)
+                            data_list.append(import_data.__dict__)
 
-                print("\n=== UPDATED BOOK LIST ===")
-                display_books(data_list)    
+                    print("\n=== UPDATED BOOK LIST ===")
+                    display_books(data_list)    
 
         # Search by Category
         elif choice == 4:
@@ -433,24 +442,27 @@ def search():
             filtered_books = [b for b in data_list if b["category"].lower() == category_name.lower()]
             print(f"\n=== BOOKS IN CATEGORY: {category_name.upper()} ===")
             display_books(filtered_books)
-            borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
-            if borrow_or_back == 'Enter':
+            if manager:
                 continue
             else:
-                for i in acc:
-                    MSSV = i
-                borrow_display(MSSV, borrow_or_back)
-                with open("FileBook.txt", "r", encoding="utf-8") as f:
-                    book_list = f.readlines()
-                data_list = []
-                for line in book_list:
-                    parts = [x.strip() for x in line.split("; ")]
-                    if len(parts) == 9:
-                        import_data = DataBook(*parts)
-                        data_list.append(import_data.__dict__)
+                borrow_or_back = input("Enter ID book to borrow a book or Enter to comeback: ")
+                if borrow_or_back == 'Enter':
+                    continue
+                else:
+                    for i in acc:
+                        MSSV = i
+                    borrow_display(MSSV, borrow_or_back)
+                    with open("FileBook.txt", "r", encoding="utf-8") as f:
+                        book_list = f.readlines()
+                    data_list = []
+                    for line in book_list:
+                        parts = [x.strip() for x in line.split("; ")]
+                        if len(parts) == 9:
+                            import_data = DataBook(*parts)
+                            data_list.append(import_data.__dict__)
 
-                print("\n=== UPDATED BOOK LIST ===")
-                display_books(data_list)
+                    print("\n=== UPDATED BOOK LIST ===")
+                    display_books(data_list)
 
         elif choice == 5:
             back_search = True
@@ -628,8 +640,8 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
     except FileNotFoundError:
         print("Customer profile does not exist yet.")
 
-    return_or_back = input("\nPress Enter to return to the user menu...")
-    if return_or_back.upper() == 'Enter':
+    return_or_back = input("\nPress 'R' to return book | Press Enter to return to the user menu...")
+    if return_or_back.upper() == 'R':
         return_book()
             
 acc = []            
