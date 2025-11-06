@@ -58,10 +58,11 @@ def manager_menu():
     if to_do == 1:
         use_data_book()
     elif to_do == 2:
-        search()
+        search(manager = True)
     elif to_do == 3:
         top_trending()
     elif to_do == 4:
         back = True
     
+
 
