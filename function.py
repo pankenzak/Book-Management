@@ -9,18 +9,18 @@ def next_day():
     mssv = acc[0]
     user_path = f'{mssv}.txt'
 
-    # 1) Đọc toàn bộ file một lần
+    # Đọc toàn bộ file một lần
     with open(user_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    # 2) Giữ lại các header và gom tất cả record BRW-… vào list
+    # Giữ lại các header và gom tất cả record BRW-… vào list
     headers = []
     brw_rows = []
     full_name = ''
     passw = ''
 
     for line in lines:
-        # 1) Header
+        # Header
         if line.startswith(('ID:', 'NAME:', 'PASSWORD:')):
             headers.append(line if line.endswith('\n') else line + '\n')
             if line.startswith('NAME:'):
@@ -29,11 +29,11 @@ def next_day():
                 passw = line.split('PASSWORD: ', 1)[1].strip()
             continue
 
-        # 2) Bỏ qua tiêu đề bảng (sẽ ghi lại sau)
+        # Bỏ qua tiêu đề bảng (sẽ ghi lại sau)
         if line.strip().startswith('Borrowed books:'):
             continue
 
-        # 3) Bản ghi mượn sách
+        # Bản ghi mượn sách
         if line.startswith('BRW-'):
             parts = [x.strip() for x in line.rstrip('\n').split(', ')]
             # parts[6] = countdown, parts[7] = status
@@ -50,6 +50,7 @@ def next_day():
                 if days <= 1:
                     parts[6] = '0'
                     parts[7] = 'Returned'
+                    parts[8] = '-'
                 else:
                     parts[6] = str(days - 1)
                     if parts[7].lower().startswith('return'):
@@ -60,7 +61,7 @@ def next_day():
         continue
 
 
-    # 3) Ghi lại file **một lần duy nhất**
+    # Ghi lại file **một lần duy nhất**
     with open(user_path, 'w', encoding='utf-8') as f:
         for h in headers:
             f.write(h)
@@ -156,11 +157,11 @@ def borrow_display(MSSV, id_book = None):
                     lines[i] = f"Number of days left to pay: {remaining_days}\n"
 
             # Ghi lại file người dùng
-            # 1) Ghi lại toàn bộ lines như cũ
+            # Ghi lại toàn bộ lines như cũ
             with open(user_file, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
 
-            # 2) Đảm bảo có newline cuối file rồi mới append record (COPY y hệt kiểu ở add_book)
+            # Đảm bảo có newline cuối file rồi mới append record (COPY y hệt kiểu ở add_book)
             record = (f"{ID}, {MSSV}, {full_name}, {borrowed_book_name}, "
                       f"{today_str}, {return_date_str}, {remaining_days}, {status}, {action}")
 
@@ -190,11 +191,11 @@ def return_book():
     mssv = acc[0]
     user_path = f'{mssv}.txt'
 
-    # 1) Đọc file một lần
+    # Đọc file một lần
     with open(user_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
 
-    # 2) Tách header và gom các dòng BRW-...
+    # Tách header và gom các dòng BRW-...
     headers = []
     brw_rows = []
     full_name = ''
@@ -236,10 +237,10 @@ def return_book():
             brw_rows.append(', '.join(parts) + '\n')
 
         else:
-            # các dòng khác (nếu có) thì bỏ qua hoặc giữ tùy bạn
+            
             continue
 
-    # 3) Ghi lại file một lần
+    # Ghi lại file một lần
     with open(user_path, 'w', encoding='utf-8') as f:
         for h in headers:
             f.write(h)
