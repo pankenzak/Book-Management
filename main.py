@@ -1,6 +1,5 @@
 #chỗ này để code tổng
-from display_user import user_display
-from display_manager import manager_menu
+from display import user_display, manager_menu
 import sys
 
 stop = False
