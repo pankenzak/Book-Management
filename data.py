@@ -11,14 +11,6 @@ class DataBook:
         self.available = available
         self.trends = trends
         
-    def det_ID(self):
-        return self.id_book
-
-    def author_name(self):
-        return self.author
-    
-    def book_name(self):
-        return self.name_book
     
 class BorrowedBook:
     def __init__(self, ID, MSSV, full_name, name_book, borrow_date, return_date, countdown, status, action):
@@ -31,3 +23,10 @@ class BorrowedBook:
         self.countdown = countdown
         self.status = status
         self.action = action
+        
+   
+class DataClient:
+    def __init__(self, ID, name, count_book):
+        self.ID = ID
+        self.name = name
+        self.count_book = count_book

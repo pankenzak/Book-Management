@@ -1,6 +1,6 @@
 import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
-from data import DataBook, BorrowedBook
+from data import DataBook, BorrowedBook, DataClient
 from datetime import datetime, timedelta
 import random as r
 import os
@@ -641,12 +641,13 @@ def top_trending():
     print_all_book('top_trending.txt')       
             
                       
-def use_data_client():    # kiểm tra để xem thông tin khách hàng
-    if not acc:
-        print("Please log in first.")
-        return
+def use_data_client(MSSV = None, manager = False):    # kiểm tra để xem thông tin khách hàng
+    if not manager:  
+        if not acc:
+            print("Please log in first.")
+            return
 
-    MSSV = acc[0]
+        MSSV = acc[0]
     base_dir = os.path.dirname(__file__)
     data_dir = os.path.join(base_dir, "Data")
     os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
@@ -672,10 +673,12 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
 
     except FileNotFoundError:
         print("Customer profile does not exist yet.")
-
-    return_or_back = input("\nPress 'R' to return book | Press Enter to return to the user menu...")
-    if return_or_back.upper() == 'R':
-        return_book()
+    
+    if not manager:
+        return_or_back = input("\nPress 'R' to return book | Press Enter to return to the user menu...")
+        if return_or_back.upper() == 'R':
+            return_book()
+            
             
 acc = []            
 def login_user():
@@ -798,22 +801,43 @@ def update_remaining_days(MSSV):
     except FileNotFoundError:
         pass            
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-               
+
+def read_all_data_files():
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)  # tạo thư mục nếu chưa có
+    
+    client_list = []
+    for file_name in os.listdir(data_dir):
+        if file_name.endswith(".txt"):  # chỉ lấy file .txt
+            file_path = os.path.join(data_dir, file_name)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.readlines()
+            count_book = 0
+            ID = name = "(unknown)"
+            for i in content:
+                if i.startswith('ID: '):
+                     ID_raw = i.split(': ')
+                     ID = ID_raw[1]
+                elif i.startswith('NAME: '):
+                     name_raw = i.split(': ')
+                     name = name_raw[1]
+                     
+                elif i.startswith('BRW-'):
+                    count_book += 1
+            dc = DataClient(ID, name, count_book)
+            client_list.append(dc.__dict__)
+    
+    df = pd.DataFrame(client_list)
+    df.index = range(1, len(df)+1)
+        
+    print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))                
 
 
-
-
-
-
-
-
+    client_inf = input("Enter that customer's ID to view details: ")
+    
+    use_data_client(client_inf.upper(), manager = True)
+    
+            
+            
+            

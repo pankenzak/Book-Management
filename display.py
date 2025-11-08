@@ -1,4 +1,4 @@
-from function import borrow_display, search, top_trending, use_data_client, login_user, next_day, print_all_book, add_book, update_book, delete_book
+from function import borrow_display, search, top_trending, use_data_client, login_user, next_day, print_all_book, add_book, update_book, delete_book, read_all_data_files
 
 
 def user_display(take_MSSV = False):
@@ -111,14 +111,16 @@ def use_data_book():
 def manager_menu():
   back = False
   while back == False:  #while nay dung de back cua phan lua chon lam gi
-    to_do = int(input('\n1. Data books\n2. Search\n3. Top trending\n4. Back \nPleaser enter your choice(1/2/3/4): '))
+    to_do = int(input('\n1. Data books\n2. Data client\n3. Search\n4. Top trending\n5. Back \nPleaser enter your choice(1/2/3/4/5): '))
     if to_do == 1:
         use_data_book()
     elif to_do == 2:
-        search(manager = True)
+        read_all_data_files()
     elif to_do == 3:
-        top_trending()
+        search(manager = True)
     elif to_do == 4:
+        top_trending()
+    elif to_do == 5:
         back = True
 
       
