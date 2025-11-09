@@ -1,13 +1,16 @@
 import pandas as pd #truc quan hoa du lieu
 from tabulate import tabulate #de ve bang
-from data_book import DataBook
+from data import DataBook, BorrowedBook, DataClient
 from datetime import datetime, timedelta
-from borrowed_books import BorrowedBook
 import random as r
+import os
 
 def next_day():
-    mssv = acc[0]
-    user_path = f'{mssv}.txt'
+    MSSV = acc[0]
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True) 
+    user_path = os.path.join(data_dir, f"{MSSV}.txt")
 
     # Đọc toàn bộ file một lần
     with open(user_path, 'r', encoding='utf-8') as f:
@@ -62,6 +65,10 @@ def next_day():
 
 
     # Ghi lại file **một lần duy nhất**
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+    file_name = os.path.join(data_dir, f"{MSSV}.txt")
     with open(user_path, 'w', encoding='utf-8') as f:
         for h in headers:
             f.write(h)
@@ -71,6 +78,7 @@ def next_day():
 
     
 def take_category():
+    
     with open('FileBook.txt', 'r') as f:
         book_list = f.readlines() 
     dict_category = {}
@@ -102,7 +110,7 @@ def borrow_display(MSSV, id_book = None):
     for line in book_list:
         book_materies = [x.strip() for x in line.split('; ')]
 
-        if book_materies[0] == id_book:
+        if book_materies[0] == id_book.upper():
             found = True
             quantity = int(book_materies[6])
             if quantity > 0:
@@ -126,7 +134,10 @@ def borrow_display(MSSV, id_book = None):
     
     if found and quantity > 0:
         # Cập nhật file người dùng
-        user_file = f"{MSSV}.txt"
+        base_dir = os.path.dirname(__file__)
+        data_dir = os.path.join(base_dir, "Data")
+        os.makedirs(data_dir, exist_ok=True) 
+        user_file = os.path.join(data_dir, f"{MSSV}.txt")
         
         try:
             # cái này dùng để đếm ngày
@@ -135,7 +146,7 @@ def borrow_display(MSSV, id_book = None):
             return_date = today + timedelta(days=7)
             return_date_str = return_date.strftime("%d/%m/%Y")
             remaining_days = 7
-            # Đọc nội dung hiện tại
+            # Đọc nội dung hiện 
             with open(user_file, 'r', encoding='utf-8') as f:
                 lines = f.readlines()
             ID = random_borrow_id(MSSV)
@@ -165,6 +176,10 @@ def borrow_display(MSSV, id_book = None):
             record = (f"{ID}, {MSSV}, {full_name}, {borrowed_book_name}, "
                       f"{today_str}, {return_date_str}, {remaining_days}, {status}, {action}")
 
+            base_dir = os.path.dirname(__file__)
+            data_dir = os.path.join(base_dir, "Data")
+            os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+            file_name = os.path.join(data_dir, f"{MSSV}.txt")
             with open(user_file, 'a+', encoding='utf-8') as tail:
                 tail.seek(0, 2)                # nhảy tới cuối file
                 if tail.tell() > 0:
@@ -188,8 +203,11 @@ def borrow_display(MSSV, id_book = None):
     print("\nBook list has been updated successfully.")
 
 def return_book():
-    mssv = acc[0]
-    user_path = f'{mssv}.txt'
+    MSSV = acc[0]
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+    user_path = os.path.join(data_dir, f"{MSSV}.txt")
 
     # Đọc file một lần
     with open(user_path, 'r', encoding='utf-8') as f:
@@ -241,6 +259,10 @@ def return_book():
             continue
 
     # Ghi lại file một lần
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+    file_name = os.path.join(data_dir, f"{MSSV}.txt")
     with open(user_path, 'w', encoding='utf-8') as f:
         for h in headers:
             f.write(h)
@@ -255,7 +277,11 @@ def return_book():
 
 
 def borrowed_books_table(MSSV):
-    with open(f'{MSSV}.txt', 'r') as f:
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+    file_name = os.path.join(data_dir, f"{MSSV}.txt")
+    with open(file_name, 'r') as f:
         lines = f.readlines()
     
     borrow_list = []    
@@ -530,6 +556,8 @@ def update_book(trend = False, select_book = None):
                                     book_materies[5] = input('Enter producer: ')
                                 elif what_change == 6:
                                     book_materies[6] = int(input('Enter quantity: '))
+                                    if book_materies[6] == '0' or book_materies[6] == 0:
+                                        book_materies[7] = False
                                 elif what_change == 7:
                                     cancel = True
                                     for n in range(0,9):
@@ -565,7 +593,7 @@ def delete_book():
             #tao danh sach moi, bo quyen sach bi xoa
             for line in book_list:
                 book_materies = [x.strip() for x in line.split('; ')]
-                if book_materies[0] == delete_id:
+                if book_materies[0] == delete_id.upper():
                     found = True
                     print(f'Book with ID {delete_id} has been deleted')
                     continue
@@ -613,15 +641,20 @@ def top_trending():
     print_all_book('top_trending.txt')       
             
                       
-def use_data_client():    # kiểm tra để xem thông tin khách hàng
-    if not acc:
-        print("Please log in first.")
-        return
+def use_data_client(MSSV = None, manager = False):    # kiểm tra để xem thông tin khách hàng
+    if not manager:  
+        if not acc:
+            print("Please log in first.")
+            return
 
-    MSSV = acc[0]
-    file_name = f"{MSSV}.txt"
+        MSSV = acc[0]
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+    file_name = os.path.join(data_dir, f"{MSSV}.txt")
 
     try:
+        
         with open(file_name, 'r', encoding='utf-8') as f:
             lines = f.readlines()
 
@@ -640,10 +673,12 @@ def use_data_client():    # kiểm tra để xem thông tin khách hàng
 
     except FileNotFoundError:
         print("Customer profile does not exist yet.")
-
-    return_or_back = input("\nPress 'R' to return book | Press Enter to return to the user menu...")
-    if return_or_back.upper() == 'R':
-        return_book()
+    
+    if not manager:
+        return_or_back = input("\nPress 'R' to return book | Press Enter to return to the user menu...")
+        if return_or_back.upper() == 'R':
+            return_book()
+            
             
 acc = []            
 def login_user():
@@ -651,7 +686,10 @@ def login_user():
     MSSV = input("Enter customer ID (EX: SE203900): ").upper()
     acc.clear()
     acc.append(MSSV)
-    file_name = f"{MSSV}.txt"
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+    file_name = os.path.join(data_dir, f"{MSSV}.txt")
 
     try:
         # Nếu có file → đọc thông tin
@@ -704,6 +742,10 @@ def login_user():
         name = input("Enter customer name: ").strip()
         password = input("Create a password: ").strip()
         
+        base_dir = os.path.dirname(__file__)
+        data_dir = os.path.join(base_dir, "Data")
+        os.makedirs(data_dir, exist_ok=True)                              # <-- tạo thư mục
+        file_name = os.path.join(data_dir, f"{MSSV}.txt")
         with open(file_name, 'w', encoding='utf-8') as f:
             f.write(f"ID: {MSSV}\n")
             f.write(f"NAME: {name}\n")
@@ -716,15 +758,19 @@ def login_user():
 
  # này là hàm đếm ngược ngày
 def update_remaining_days(MSSV):
-    user_file = f"{MSSV}.txt"
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)
+    user_file = os.path.join(data_dir, f"{MSSV}.txt")
     try:
+                                    
         with open(user_file, 'r', encoding='utf-8') as f:
             lines = f.readlines()
 
         return_date = None
 
         for line in lines:
-            if "Ngày trả:" in line:
+            if "Book return date:" in line:
                 try:
                     date_part = line.split("Book return date:")[1].strip()
                     return_date = datetime.strptime(date_part, "%d/%m/%Y")
@@ -748,29 +794,50 @@ def update_remaining_days(MSSV):
 
             if not found:
                 lines.append(f"Number of days left to pay: {remaining_days}\n")
-
+            
             with open(user_file, 'w', encoding='utf-8') as f:
                 f.writelines(lines)
 
     except FileNotFoundError:
         pass            
             
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-               
+
+def read_all_data_files():
+    base_dir = os.path.dirname(__file__)
+    data_dir = os.path.join(base_dir, "Data")
+    os.makedirs(data_dir, exist_ok=True)  # tạo thư mục nếu chưa có
+    
+    client_list = []
+    for file_name in os.listdir(data_dir):
+        if file_name.endswith(".txt"):  # chỉ lấy file .txt
+            file_path = os.path.join(data_dir, file_name)
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.readlines()
+            count_book = 0
+            ID = name = "(unknown)"
+            for i in content:
+                if i.startswith('ID: '):
+                     ID_raw = i.split(': ')
+                     ID = ID_raw[1]
+                elif i.startswith('NAME: '):
+                     name_raw = i.split(': ')
+                     name = name_raw[1]
+                     
+                elif i.startswith('BRW-'):
+                    count_book += 1
+            dc = DataClient(ID, name, count_book)
+            client_list.append(dc.__dict__)
+    
+    df = pd.DataFrame(client_list)
+    df.index = range(1, len(df)+1)
+        
+    print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))                
 
 
-
-
-
-
-
-
+    client_inf = input("Enter that customer's ID to view details: ")
+    
+    use_data_client(client_inf.upper(), manager = True)
+    
+            
+            
+            

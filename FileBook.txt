@@ -1,9 +1,9 @@
-B001; Harry Potter and the Philosopher's Stone; J.K. Rowling; Fantasy; 1997; Bloomsbury; 14; True; 13
-B002; To Kill a Mockingbird; Harper Lee; Classic; 1960; J.B. Lippincott & Co.; 12; True; 7
-B003; 1984; George Orwell; Dystopian; 1949; Secker & Warburg; 19; True; 11
-B004; The Great Gatsby; F. Scott Fitzgerald; Novel; 1925; Charles Scribner's Sons; 22; True; 0
+B001; Harry Potter and the Philosopher's Stone; J.K. Rowling; Fantasy; 1997; Bloomsbury; 5; True; 22
+B002; To Kill a Mockingbird; Harper Lee; Classic; 1960; J.B. Lippincott & Co.; 10; True; 9
+B003; 1984; George Orwell; Dystopian; 1949; Secker & Warburg; 18; True; 12
+B004; The Great Gatsby; F. Scott Fitzgerald; Novel; 1925; Charles Scribner's Sons; 0; False; 0
 B005; Pride and Prejudice; Jane Austen; Romance; 1813; T. Egerton; 20; True; 11
 B006; The Hobbit; J.R.R. Tolkien; Fantasy; 1937; George Allen & Unwin; 18; True; 1
-B007; The Catcher in the Rye; J.D. Salinger; Classic; 1951; Little, Brown and Company; 16; True; 1
+B007; The Catcher in the Rye; J.D. Salinger; Classic; 1951; Little, Brown and Company; 0; False; 1
 B008; Moby-Dick; Herman Melville; Adventure; 1851; Harper & Brothers; 14; True; 3
-B009; The Alchemist; Paulo Coelho; Philosophy; 1988; HarperCollins; 18; True; 3
+B009; The Alchemist; Paulo Coelho; Philosophy; 1988; HarperCollins; 0; False; 4

@@ -1,0 +1,6 @@
+ID: SE203651
+NAME: Le Nhat Khanh
+PASSWORD: 123
+Borrowed books: 
+BRW-20251107-000046-SE203651-5230, SE203651, Le Nhat Khanh, Harry Potter and the Philosopher's Stone, 07/11/2025, 14/11/2025, 0, Returned, -
+BRW-20251107-000634-SE203651-7694, SE203651, Le Nhat Khanh, The Alchemist, 07/11/2025, 14/11/2025, 7, Borrowing, Return

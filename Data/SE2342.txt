@@ -1,0 +1,7 @@
+ID: SE2342
+NAME: www
+PASSWORD: 123
+Borrowed books: 
+BRW-20251107-131644-SE2342-1999, SE2342, www, Harry Potter and the Philosopher's Stone, 07/11/2025, 14/11/2025, 0, Returned, -
+BRW-20251107-132331-SE2342-3042, SE2342, www, Harry Potter and the Philosopher's Stone, 07/11/2025, 14/11/2025, 0, Returned, -
+BRW-20251107-132352-SE2342-3686, SE2342, www, To Kill a Mockingbird, 07/11/2025, 14/11/2025, 3, Returned, -
