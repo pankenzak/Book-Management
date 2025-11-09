@@ -770,7 +770,7 @@ def update_remaining_days(MSSV):
         return_date = None
 
         for line in lines:
-            if "Ngày trả:" in line:
+            if "Book return date:" in line:
                 try:
                     date_part = line.split("Book return date:")[1].strip()
                     return_date = datetime.strptime(date_part, "%d/%m/%Y")
