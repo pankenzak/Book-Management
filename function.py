@@ -683,7 +683,7 @@ def use_data_client(MSSV = None, manager = False):    # kiểm tra để xem th�
 acc = []            
 def login_user():
     print("\n=== USER LOGIN ===")
-    MSSV = input("Enter customer ID (EX: SE203900): ").upper()
+    MSSV = input("Enter customer ID (EX: SE123456): ").upper()
     acc.clear()
     acc.append(MSSV)
     base_dir = os.path.dirname(__file__)
@@ -841,3 +841,4 @@ def read_all_data_files():
             
             
             
+
