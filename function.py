@@ -522,14 +522,13 @@ def print_all_book(what_file = 'FileBook.txt'):
     print(tabulate(df, headers = 'keys', tablefmt = 'grid', showindex = True, stralign = 'left'))
 
 def add_book(id_book, name_book, author, category, publication_year, producer, quantity, available, trends = 0):
-            with open('FileBook.txt', 'a') as file_w:
-                with open('FileBook.txt', 'a+') as file_n:
-                    file_n.seek(0, 2)
-                    if file_n.tell() > 0:
-                        file_n.seek(file_w.tell() - 1)
-                        if file_n.read(1) != '\n':    # nếu cuối file chưa có newline thì chèn
-                            file_n.write('\n')
-                file_w.write(f'{id_book}; {name_book}; {author}; {category}; {publication_year}; {producer}; {quantity}; {available}; {trends}\n')
+            with open('FileBook.txt', 'a+') as file_n:
+                file_n.seek(0, 2)
+                if file_n.tell() > 0:
+                    file_n.seek(file_w.tell() - 1)
+                    if file_n.read(1) != '\n':    # nếu cuối file chưa có newline thì chèn
+                        file_n.write('\n')
+            file_w.write(f'{id_book}; {name_book}; {author}; {category}; {publication_year}; {producer}; {quantity}; {available}; {trends}\n')
             print_all_book()
 
 def update_book(trend = False, select_book = None):
@@ -841,4 +840,5 @@ def read_all_data_files():
             
             
             
+
 
